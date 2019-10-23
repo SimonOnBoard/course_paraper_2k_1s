@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter({"/home","/login"})
+@WebFilter({"/home"})
 public class HomeFilter implements Filter {
 
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -19,12 +19,11 @@ public class HomeFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         HttpServletResponse response = (HttpServletResponse)servletResponse;
 
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
 
         if (session == null || session.getAttribute("user") == null) {
             servletRequest.getServletContext().getRequestDispatcher("/login").forward(request, response);
         }
-
         filterChain.doFilter(request,response);
     }
 

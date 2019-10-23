@@ -23,11 +23,12 @@ public class User {
         this.id = id;
         this.name = name;
         this.password = password;
+        this.getRegiStrationDate();
     }
 
     public User(String name, String password, String nick, String mail, Date birth) {
         this.name = name;
-        this.password = PasswordEncripter.getPass(password);
+        this.password = PasswordEncripter.getEncryptedString(password);
         this.nick = nick;
         this.email = mail;
         this.birth_date = birth;

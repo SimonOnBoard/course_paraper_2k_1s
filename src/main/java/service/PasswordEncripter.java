@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class PasswordEncripter {
-    public static String getPass(String password){
+    public static String getEncryptedString(String password){
         byte[] data1 = new byte[0];
         try {
             data1 = password.getBytes("UTF-8");

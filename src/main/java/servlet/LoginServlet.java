@@ -1,10 +1,13 @@
 package servlet;
 
+import com.google.gson.Gson;
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import dao.UsersRepository;
 import model.User;
+import service.LoginValidator;
 import service.PasswordEncripter;
 
+import javax.json.Json;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +20,10 @@ import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.MessageDigestSpi;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -33,21 +40,22 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
+        String name = req.getParameter("username");
         String password = req.getParameter("password");
-        User user = usersRepository.find(name).get();
+        Optional<User> user = usersRepository.find(name);
         HttpSession session = req.getSession();
-        if(checkLoginandPass(name,password,user)){
+        List<String> errors= LoginValidator.validate(name,password,user);
+        Map<String, Object> data = new HashMap<>();
+        if(errors.size() == 0){
             session.setAttribute("user",name);
-            resp.sendRedirect("/home");
+            data.put("redirect","/home");
         }
         else{
-            req.getServletContext().getRequestDispatcher("/WEB-INF/templates/login.ftl").forward(req,resp);
+            data.put("errors", errors);
         }
+        String json = new Gson().toJson(data);
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write(json);
     }
 
-    private boolean checkLoginandPass(String name, String password, User user) {
-        password = PasswordEncripter.getPass(password);
-        return (user.getName().equals(name) && user.getPassword().equals(password));
-    }
 }

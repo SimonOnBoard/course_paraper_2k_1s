@@ -25,6 +25,23 @@ public class UsersRepository {
         return new User(id,name,password,nick,mail, birthday, registration,posts);
     };
     //language=SQL
+    public Optional<User> findById(Long id) {
+        User user = null;
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")){
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            //Если соответстующая строка найдена,обрабатываем её c помощью userRowMapper.
+            //Соответствунно получаем объект User.
+            if (resultSet.next()) {
+                user = userFindRowMapper.mapRow(resultSet);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(user);
+    }
+    //language=SQL
     private static final String SQL_find = "select * from users WHERE username = ";
     public Optional<User> find(String name) {
         User user = null;
