@@ -25,5 +25,7 @@
         ${timeOnBoard}
     </p>
 </#if>
+<input type="submit" value="logout"
+       onclick="window.location='/logout';" />
 </body>
 </html>

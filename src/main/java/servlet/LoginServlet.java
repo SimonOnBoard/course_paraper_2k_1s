@@ -2,18 +2,18 @@ package servlet;
 
 import com.google.gson.Gson;
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+import dao.UsersAuthRepository;
 import dao.UsersRepository;
 import model.User;
+import model.UserAuthParametr;
 import service.LoginValidator;
 import service.PasswordEncripter;
+import service.StringEncriptor;
 
 import javax.json.Json;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,9 +28,11 @@ import java.util.Optional;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private UsersRepository usersRepository;
+    private UsersAuthRepository usersAuthRepository;
     @Override
     public void init() throws ServletException {
         usersRepository = new UsersRepository();
+        usersAuthRepository = new UsersAuthRepository();
     }
 
     @Override
@@ -47,7 +49,11 @@ public class LoginServlet extends HttpServlet {
         List<String> errors= LoginValidator.validate(name,password,user);
         Map<String, Object> data = new HashMap<>();
         if(errors.size() == 0){
-            session.setAttribute("user",name);
+            session.setAttribute("user",user.get().getId());
+            String addToCookie = StringEncriptor.getEncryptedString(name + password);
+            this.saveAuthParam(user.get(),addToCookie);
+            Cookie authParam = this.getAuthCookie(addToCookie);
+            resp.addCookie(authParam);
             data.put("redirect","/home");
         }
         else{
@@ -56,6 +62,16 @@ public class LoginServlet extends HttpServlet {
         String json = new Gson().toJson(data);
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(json);
+    }
+
+    private void saveAuthParam(User user, String addToCookie) {
+        this.usersAuthRepository.save(new UserAuthParametr(addToCookie, user.getId()));
+    }
+
+    private Cookie getAuthCookie(String value) {
+        Cookie cookie = new Cookie("abrakadabra", value);
+        cookie.setMaxAge(-1);
+        return cookie;
     }
 
 }

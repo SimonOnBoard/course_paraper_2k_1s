@@ -35,14 +35,14 @@ public class HomeServlet extends HttpServlet {
         }
         else{
             HttpSession session = req.getSession();
-            String name = (String) session.getAttribute("user");
-            user = usersRepository.find(name).get();
+            Long name = (Long) session.getAttribute("user");
+            user = usersRepository.findById(name).get();
 
             req.setAttribute("curr_user", user);
             req.setAttribute("timeOnBoard", TimeConverter.getUsersTimeOnSite(user.getRegiStrationDate()));
         }
         req.getServletContext().getRequestDispatcher("/WEB-INF/templates/profile.ftl").forward(req,resp);
-    }
+        }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

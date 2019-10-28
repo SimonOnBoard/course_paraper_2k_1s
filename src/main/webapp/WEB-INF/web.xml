@@ -46,4 +46,17 @@
         <servlet-name>freemarker</servlet-name>
         <url-pattern>*.ftl</url-pattern>
     </servlet-mapping>
+
+<!--    <absolute-ordering>-->
+<!--        <name>filter1</name>-->
+<!--        <name>filter2</name>-->
+<!--    </absolute-ordering>-->
+    <filter-mapping>
+        <filter-name>filter1</filter-name>
+        <url-pattern>/home</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>filter2</filter-name>
+        <url-pattern>/home</url-pattern>
+    </filter-mapping>
 </web-app>
