@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.Category;
 import model.Post;
+import model.User;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.recycler.Recycler;
@@ -31,7 +32,20 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Optional<Post> find(Long id) {
-        return Optional.empty();
+        Post post = null;
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM post WHERE id = ?")){
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            //Если соответстующая строка найдена,обрабатываем её c помощью userRowMapper.
+            //Соответствунно получаем объект User.
+            if (resultSet.next()) {
+                post = postRowMapper.mapRow(resultSet);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(post);
     }
 
     @Override
@@ -73,7 +87,7 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-    private void saveToElastic(Post model) {
+    private synchronized void saveToElastic(Post model) {
         try {
             String value = objectMapper.writeValueAsString(model);
             TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)

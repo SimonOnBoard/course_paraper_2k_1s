@@ -31,5 +31,6 @@ public class Post {
         this.showAuthor = showAuthor;
         this.auth_id = auth_id;
         this.comments = null;
+        this.getName();
     }
 }

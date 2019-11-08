@@ -12,10 +12,8 @@ import javax.servlet.http.*;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 @MultipartConfig
@@ -32,10 +30,12 @@ public class NewPostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        preparePostToSave(req,resp, session);
+        Post post = preparePostToSave(req,resp, session);
+        req.setAttribute("id", post.getId());
+        req.getServletContext().getRequestDispatcher("/showPost").forward(req,resp);
     }
 
-    private void preparePostToSave(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws IOException, ServletException {
+    private Post preparePostToSave(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws IOException, ServletException {
         req.setCharacterEncoding("UTF-8");
         Post post = new Post();
         post.setPublication(LocalDateTime.now());
@@ -61,6 +61,7 @@ public class NewPostServlet extends HttpServlet {
         p.write(fullpath);
         post.setPhotopath("/" + localdir + "/" + filename);
         postRepository.save(post);
+        return post;
     }
     private PostRepository postRepository;
     @Override

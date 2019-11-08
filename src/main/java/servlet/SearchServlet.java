@@ -13,6 +13,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.WildcardQueryBuilder;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.FieldSortBuilder;
@@ -47,12 +48,14 @@ public class SearchServlet extends HttpServlet {
 
 // on shutdown
        // MatchAllQueryBuilder queryBuilder = QueryBuilders.matchAllQuery();
-        MatchPhraseQueryBuilder queryBuilder = QueryBuilders.matchPhraseQuery("name","such a name");
-        queryBuilder.slop(3);
+
+//        MatchPhraseQueryBuilder queryBuilder = QueryBuilders.matchPhraseQuery("name","such a name");
+//        queryBuilder.slop(3);
+        WildcardQueryBuilder qb = QueryBuilders.wildcardQuery("name", "na*");
         SearchResponse scrollResp = client.prepareSearch("test_index")
                 .addSort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC)
                 .setScroll(new TimeValue(60000))
-                .setQuery(queryBuilder)
+                .setQuery(qb)
                 .setSize(1).get(); //max of 100 hits will be returned for each scroll
 //Scroll until no hits are returned
         do {

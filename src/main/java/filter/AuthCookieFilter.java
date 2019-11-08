@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = {"/home","/login","/newPost"}, filterName="filter1")
+@WebFilter(urlPatterns = {"/home","/newPost"}, filterName="filter1")
 public class AuthCookieFilter implements Filter {
     private UsersAuthRepository authRepository;
     private UsersRepository usersRepository;
@@ -43,7 +43,10 @@ public class AuthCookieFilter implements Filter {
                     if (parametr.isPresent()) {
                         Optional<User> user = usersRepository.findById(parametr.get().getOwnerId());
                         if (user.isPresent()) {
-                            session.setAttribute("user", user.get().getId());
+                            if(session.getAttribute("user") == null) {
+                                session.setAttribute("user", user.get().getId());
+                            }
+                            break;
                             //request.getServletContext().getRequestDispatcher("/home").forward(request,response);
                         }
                     }

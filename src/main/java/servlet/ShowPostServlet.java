@@ -2,7 +2,6 @@ package servlet;
 
 import dao.PostRepository;
 import dao.PostRepositoryImpl;
-import model.Category;
 import model.Post;
 
 import javax.servlet.ServletException;
@@ -11,22 +10,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
-@WebServlet("/m")
-public class SearchAbstraction extends HttpServlet {
+@WebServlet("/showPost/*")
+public class ShowPostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Enum> enumValues = Arrays.asList(Category.values());
-        req.setAttribute("categories",enumValues);
-        req.getRequestDispatcher("/WEB-INF/templates/main.ftl").forward(req, resp);
+        String n1 = req.getParameter("id");
+        Long id = Long.parseLong(n1);
+        Optional<Post> post = postRepository.find(id);
+        if(post.isPresent()){
+            req.setAttribute("post",post.get());
+            req.getServletContext().getRequestDispatcher("/WEB-INF/templates/showPost.ftl").forward(req,resp);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String value = req.getParameter("categories");
-        List<Post> posts = postRepository.findAllByCategory(value, 0L );
+        Long id = (Long) req.getAttribute("id");
+        Optional<Post> post = postRepository.find(id);
+        if(post.isPresent()){
+            req.setAttribute("post",post.get());
+            req.getServletContext().getRequestDispatcher("/WEB-INF/templates/showPost.ftl").forward(req,resp);
+        }
     }
     private PostRepository postRepository;
     @Override
