@@ -18,26 +18,22 @@
     <div class="form-style-2-heading">
         Just a registration form! PUT some information IN)
     </div>
-    <form method="post" action="/registration">
-        <label for="user_name">Nick
-            <input class="input-field" type="text" id="user_name" name="user_name">
-        </label>
-        <label for="name">User name
-            <input class="input-field" type="text" id="name" name="name">
-        </label>
-        <label for="password">Password
-            <input class="input-field" type="password" id="password" name="password">
-        </label>
-        <label for="email">Mail
-            <input class="input-field" type="text" id="email" name="email">
-        </label>
-        <label for="birth">Your birthday :)
+    <form method="post" enctype="multipart/form-data">
+        <input class="input-field" type="text" name="user_name"/>
 
-        <input type="date" id="birth" name="birth"
+        <input class="input-field" type="text" name="name"/>
+
+        <input class="input-field" type="password" name="password">
+
+        <input class="input-field" type="text" name="email"/>
+
+        <input type="date" name="birth"
                value="${cur_date}"
-               min="1900-01-01" max="${cur_date}">
-        </label>
-        <input type="submit" value="Registration">
+               min="1900-01-01" max="2020-01-01"/>
+
+        <p><input type="file" name="photo"/></p>
+
+        <input type="submit" value="Registration"/>
     </form>
 </div>
 </body>

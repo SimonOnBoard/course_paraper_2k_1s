@@ -1,11 +1,9 @@
 package servlet;
 
-import dao.UsersAuthRepository;
-import dao.UsersRepository;
+import dao.oldDaoWithoutInterfaces.UsersAuthRepository;
+import dao.oldDaoWithoutInterfaces.UsersRepository;
 import model.User;
-import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
-import javax.print.attribute.standard.NumberUp;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;

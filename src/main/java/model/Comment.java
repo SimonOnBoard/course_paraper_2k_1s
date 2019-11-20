@@ -1,4 +1,27 @@
 package model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Data
+
 public class Comment {
+    private Long id;
+    private String text;
+    private Long ownerId;
+    private Long postId;
+    private LocalDateTime date;
+
+    public Comment(String text, Long id, Long postId, LocalDateTime now) {
+        this.text = text;
+        this.ownerId = id;
+        this.postId = postId;
+        this.date = now;
+    }
+
 }

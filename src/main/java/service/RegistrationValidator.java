@@ -1,6 +1,6 @@
 package service;
 
-import dao.UsersRepository;
+import dao.oldDaoWithoutInterfaces.UsersRepository;
 
 import java.util.ArrayList;
 import java.util.List;

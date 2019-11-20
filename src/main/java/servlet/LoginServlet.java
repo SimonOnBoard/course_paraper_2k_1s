@@ -1,25 +1,17 @@
 package servlet;
 
 import com.google.gson.Gson;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
-import dao.UsersAuthRepository;
-import dao.UsersRepository;
+import dao.oldDaoWithoutInterfaces.UsersAuthRepository;
+import dao.oldDaoWithoutInterfaces.UsersRepository;
 import model.User;
 import model.UserAuthParametr;
 import service.LoginValidator;
-import service.PasswordEncripter;
 import service.StringEncriptor;
 
-import javax.json.Json;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import javax.websocket.Session;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.security.MessageDigest;
-import java.security.MessageDigestSpi;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +46,7 @@ public class LoginServlet extends HttpServlet {
             this.saveAuthParam(user.get(),addToCookie);
             Cookie authParam = this.getAuthCookie(addToCookie);
             resp.addCookie(authParam);
+            System.out.println(req.getRequestURI());
             data.put("redirect","/home");
         }
         else{

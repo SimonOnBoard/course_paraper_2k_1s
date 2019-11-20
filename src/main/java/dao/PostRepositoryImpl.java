@@ -1,13 +1,12 @@
 package dao;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dao.interfaces.PostRepository;
+import dao.interfaces.RowMapper;
 import model.Category;
 import model.Post;
-import model.User;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.recycler.Recycler;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -50,7 +49,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void save(Post model) {
-        //saveToElastic(model);
+        saveToElastic(model);
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO post(name, text, category, photo_path, publication_date, show_auth, author_id) " +
                         "VALUES (?,?,?,?,?,?,?)",
@@ -58,7 +57,7 @@ public class PostRepositoryImpl implements PostRepository {
             statement.setString(1,model.getName());
             statement.setString(2,model.getText());
             statement.setString(3,model.getCategory().toString());
-            statement.setString(4,model.getPhotopath());
+            statement.setString(4,model.getPhotoPath());
             statement.setObject(5,model.getPublication());
             statement.setObject(6, model.getShowAuthor());
             statement.setLong(7,model.getAuth_id());

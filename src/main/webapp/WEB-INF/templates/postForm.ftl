@@ -1,9 +1,7 @@
 <#include "base.ftl"/>
 
 <#macro content>
-    <script>
 
-    </script>
     <form method="post" enctype="multipart/form-data">
         <p><input type="text" name="name"/></p>
         <select id="categories" name="categories">

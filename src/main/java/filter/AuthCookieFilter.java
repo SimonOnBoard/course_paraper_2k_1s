@@ -1,8 +1,8 @@
 package filter;
 
 
-import dao.UsersAuthRepository;
-import dao.UsersRepository;
+import dao.oldDaoWithoutInterfaces.UsersAuthRepository;
+import dao.oldDaoWithoutInterfaces.UsersRepository;
 import model.User;
 import model.UserAuthParametr;
 
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = {"/home","/newPost"}, filterName="filter1")
+@WebFilter(urlPatterns = {"/home/*","/newPost/*","/showPost/*"}, filterName="filter1")
 public class AuthCookieFilter implements Filter {
     private UsersAuthRepository authRepository;
     private UsersRepository usersRepository;

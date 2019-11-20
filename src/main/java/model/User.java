@@ -18,13 +18,8 @@ public class User {
     private Date birth_date;
     private LocalDateTime regiStrationDate;
     private Long countPosts;
-    
-    public User(Long id, String name, String password) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.getRegiStrationDate();
-    }
+    private String photoPath;
+
 
     public User(String name, String password, String nick, String mail, Date birth) {
         this.name = name;
@@ -33,5 +28,17 @@ public class User {
         this.email = mail;
         this.birth_date = birth;
         this.countPosts = 0L;
+    }
+
+    public User(String name, String password, String nick, String mail,
+                Date birth, LocalDateTime now, Long l, String photoPath) {
+        this.name = name;
+        this.password = PasswordEncripter.getEncryptedString(password);
+        this.nick = nick;
+        this.email = mail;
+        this.birth_date = birth;
+        this.regiStrationDate = now;
+        this.countPosts = l;
+        this.photoPath = photoPath;
     }
 }

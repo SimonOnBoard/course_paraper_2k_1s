@@ -1,12 +1,10 @@
-package dao;
+package dao.oldDaoWithoutInterfaces;
 
-import model.User;
+import dao.interfaces.RowMapper;
 import model.UserAuthParametr;
-import org.springframework.security.core.parameters.P;
 import singletone.ConnectionService;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class UsersAuthRepository {

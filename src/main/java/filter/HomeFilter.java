@@ -1,18 +1,11 @@
 package filter;
 
-import dao.UsersAuthRepository;
-import dao.UsersRepository;
-import model.User;
-import model.UserAuthParametr;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
-import javax.xml.ws.ResponseWrapper;
 import java.io.IOException;
-import java.util.Optional;
 
-@WebFilter(urlPatterns ={"/home","/logout","/newPost"}, filterName="filter2")
+@WebFilter(urlPatterns ={"/home/*","/logout","/newPost/*","/showPost/*"}, filterName="filter2")
 public class HomeFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
     }

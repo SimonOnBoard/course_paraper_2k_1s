@@ -51,7 +51,7 @@ public class SearchServlet extends HttpServlet {
 
 //        MatchPhraseQueryBuilder queryBuilder = QueryBuilders.matchPhraseQuery("name","such a name");
 //        queryBuilder.slop(3);
-        WildcardQueryBuilder qb = QueryBuilders.wildcardQuery("name", "na*");
+        WildcardQueryBuilder qb = QueryBuilders.wildcardQuery("name", "*ad");
         SearchResponse scrollResp = client.prepareSearch("test_index")
                 .addSort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC)
                 .setScroll(new TimeValue(60000))

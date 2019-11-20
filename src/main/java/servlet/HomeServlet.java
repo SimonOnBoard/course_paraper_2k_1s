@@ -1,7 +1,6 @@
 package servlet;
 
-import com.sun.tools.corba.se.idl.constExpr.Times;
-import dao.UsersRepository;
+import dao.oldDaoWithoutInterfaces.UsersRepository;
 import model.User;
 import service.TimeConverter;
 
@@ -12,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @WebServlet("/home/*")

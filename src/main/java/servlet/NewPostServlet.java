@@ -1,6 +1,6 @@
 package servlet;
 
-import dao.PostRepository;
+import dao.interfaces.PostRepository;
 import dao.PostRepositoryImpl;
 import model.Category;
 import model.Post;
@@ -59,7 +59,7 @@ public class NewPostServlet extends HttpServlet {
         String filename = Math.random() + "." + filename_data[filename_data.length - 1];
         String fullpath = pathDir + File.separator + filename;
         p.write(fullpath);
-        post.setPhotopath("/" + localdir + "/" + filename);
+        post.setPhotoPath("/" + localdir + "/" + filename);
         postRepository.save(post);
         return post;
     }
