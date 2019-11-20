@@ -68,7 +68,7 @@ public class SearchServlet extends HttpServlet {
 //        IndexResponse response = client.prepareIndex("test_index", "_doc", String.valueOf(post1.getId()))
 //                .setSource(value2, XContentType.JSON)
 //                .get();
-//        System.out.println(response);
+//        System.out.println(response)
 //        response = client.prepareIndex("test_index", "_doc", String.valueOf(post.getId()))
 //                .setSource(jsonValue, XContentType.JSON)
 //                .get();

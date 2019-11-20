@@ -47,5 +47,6 @@ public class ShowPostServlet extends HttpServlet {
     public void init() throws ServletException {
         this.commentLoader = new CommentLoader();
         this.postRepository = new PostRepositoryImpl();
+        this.getServletContext().setAttribute("commentLoader",commentLoader);
     }
 }

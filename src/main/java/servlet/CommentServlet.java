@@ -1,5 +1,6 @@
 package servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.CommentDaoImpl;
 import dao.interfaces.CommentDao;
 import dao.oldDaoWithoutInterfaces.UsersRepository;
@@ -37,6 +38,7 @@ public class CommentServlet extends HttpServlet {
         if (user.isPresent()) {
             Comment comment = new Comment(text, id, postId, LocalDateTime.now());
             commentDao.save(comment);
+            //UserDto dto = (Commentreq.getServletContext().getAttribute("commentLoader").
         } else {
             throw new IllegalStateException("Пользователь, ненайденный в базе пытается сохранить коммент");
         }
@@ -44,10 +46,12 @@ public class CommentServlet extends HttpServlet {
 
     private CommentDao commentDao;
     private UsersRepository usersRepository;
+    private ObjectMapper objectMapper;
 
     @Override
     public void init() throws ServletException {
         this.commentDao = new CommentDaoImpl();
         this.usersRepository = new UsersRepository();
+        this.objectMapper = new ObjectMapper();
     }
 }
