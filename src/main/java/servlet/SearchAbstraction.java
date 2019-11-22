@@ -32,6 +32,7 @@ public class SearchAbstraction extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String string = req.getParameter("query");
         if(string != null){
+
             String value = req.getParameter("categories");
             List<Post> posts = postRepository.findAllByCategory(value, 0L );
             Map<String,Object> data = new HashMap<>();
@@ -55,6 +56,7 @@ public class SearchAbstraction extends HttpServlet {
     @Override
     public void init() throws ServletException {
         this.postRepository = new PostRepositoryImpl();
+        //маппер плохо работает с многопоточностью, поэтому внутри
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);

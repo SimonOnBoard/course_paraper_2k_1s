@@ -5,8 +5,10 @@ import dao.CommentDaoImpl;
 import dao.interfaces.CommentDao;
 import dao.oldDaoWithoutInterfaces.UsersRepository;
 import dto.UserDto;
+import javafx.util.Pair;
 import model.Comment;
 import model.User;
+import service.CommentLoader;
 import service.LoginValidator;
 
 import javax.servlet.ServletException;
@@ -38,7 +40,10 @@ public class CommentServlet extends HttpServlet {
         if (user.isPresent()) {
             Comment comment = new Comment(text, id, postId, LocalDateTime.now());
             commentDao.save(comment);
-            //UserDto dto = (Commentreq.getServletContext().getAttribute("commentLoader").
+            UserDto dto = commentLoader.getUserDtoById(comment.getOwnerId());
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().println(objectMapper.writeValueAsString(new Pair<>(comment, dto)));
+            //UserDto dto = (Commentreq.getServletContext().getAttribute("commentLoader")
         } else {
             throw new IllegalStateException("Пользователь, ненайденный в базе пытается сохранить коммент");
         }
@@ -47,11 +52,13 @@ public class CommentServlet extends HttpServlet {
     private CommentDao commentDao;
     private UsersRepository usersRepository;
     private ObjectMapper objectMapper;
+    private CommentLoader commentLoader;
 
     @Override
     public void init() throws ServletException {
         this.commentDao = new CommentDaoImpl();
         this.usersRepository = new UsersRepository();
         this.objectMapper = new ObjectMapper();
+        this.commentLoader = (CommentLoader) this.getServletContext().getAttribute("commentLoader");
     }
 }

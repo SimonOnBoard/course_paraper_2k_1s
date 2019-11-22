@@ -47,7 +47,6 @@ public class AuthCookieFilter implements Filter {
                                 session.setAttribute("user", user.get().getId());
                             }
                             break;
-                            //request.getServletContext().getRequestDispatcher("/home").forward(request,response);
                         }
                     }
                 }

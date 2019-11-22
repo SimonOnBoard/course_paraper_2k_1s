@@ -1,5 +1,6 @@
 package service;
 
+import com.sun.org.apache.regexp.internal.RE;
 import dao.CommentDaoImpl;
 import dao.interfaces.CommentDao;
 import dao.oldDaoWithoutInterfaces.UsersRepository;
@@ -27,5 +28,15 @@ public class CommentLoader {
         List<Pair<Comment, UserDto>> info = new ArrayList<>();
         comments.forEach(comment -> info.add(new Pair<>(comment, dtos.get(comment.getOwnerId()))));
         return info;
+    }
+
+    public UserDto getUserDtoById(Long id) {
+         Optional<UserDto> userDto = usersRepository.findDtoById(id);
+         if(userDto.isPresent()){
+             return userDto.get();
+         }
+         else{
+             throw new IllegalArgumentException("Нету комментария");
+         }
     }
 }

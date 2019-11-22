@@ -1,15 +1,18 @@
 package model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import serializers.CommentSerializer;
+import serializers.PostSerializer;
 
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Data
-
+@JsonSerialize(using = CommentSerializer.class)
 public class Comment {
     private Long id;
     private String text;

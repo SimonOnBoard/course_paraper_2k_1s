@@ -3,6 +3,7 @@ package servlet;
 import dao.oldDaoWithoutInterfaces.UsersRepository;
 import model.User;
 import service.RegistrationValidator;
+import sun.jvm.hotspot.oops.ObjectHeap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @MultipartConfig
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
@@ -28,31 +30,35 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        Date birth = Date.valueOf(req.getParameter("birth"));
+        String date = req.getParameter("birth");
         String nick = req.getParameter("user_name");
         String name = req.getParameter("name");
         String password = req.getParameter("password");
         String mail = req.getParameter("email");
-        List<String> errors = registrationValidator.validate(mail, password, nick, name);
+        List<String> errors = registrationValidator.validate(mail, password, nick, name, date);
         if (errors.isEmpty()) {
+            Date birth = Date.valueOf(date);
             Part p = req.getPart("photo");
-            String localdir = "avatars";
-            String pathDir = getServletContext().getRealPath("") + File.separator + localdir;
-            File dir = new File(pathDir);
-            if (!dir.exists()) {
-                dir.mkdir();
+            String photoPath = "/avatars/0.5040463975619325.jpg";
+            if (p.getSize() != 0) {
+                String localdir = "avatars";
+                String pathDir = getServletContext().getRealPath("") + File.separator + localdir;
+                File dir = new File(pathDir);
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
+                String[] filename_data = p.getSubmittedFileName().split("\\.");
+                String filename = Math.random() + "." + filename_data[filename_data.length - 1];
+                String fullpath = pathDir + File.separator + filename;
+                p.write(fullpath);
+                photoPath = ("/" + localdir + "/" + filename);
             }
-            String[] filename_data = p.getSubmittedFileName().split("\\.");
-            String filename = Math.random() + "." + filename_data[filename_data.length - 1];
-            String fullpath = pathDir + File.separator + filename;
-            p.write(fullpath);
-            String photoPath = ("/" + localdir + "/" + filename);
             usersRepository.save(new User(name, password, nick, mail, birth,
-                    LocalDateTime.now(), (Long)0L, photoPath));
+                    LocalDateTime.now(),  0L, photoPath));
             resp.sendRedirect("/login");
         } else {
             req.setAttribute("errors", errors);
-            req.setAttribute("cur_date", birth);
+            req.setAttribute("cur_date", new Date(System.currentTimeMillis()));
             req.getRequestDispatcher("/WEB-INF/templates/registration.ftl").forward(req, resp);
         }
     }

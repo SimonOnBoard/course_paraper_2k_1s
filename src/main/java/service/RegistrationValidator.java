@@ -2,6 +2,7 @@ package service;
 
 import dao.oldDaoWithoutInterfaces.UsersRepository;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -22,12 +23,19 @@ public class RegistrationValidator {
         pattern = Pattern.compile(EMAIL_PATTERN);
     }
 
-    public synchronized List<String> validate(String mail, String password, String nick, String name) {
+    public synchronized List<String> validate(String mail, String password, String nick, String name, String birth) {
         this.cleanErrors();
         this.validateMail(mail);
         this.validatePassword(password);
         this.validateName(name);
+        this.validateDate(birth);
         return this.errors;
+    }
+
+    private void validateDate(String birth) {
+        if(birth.equals("")){
+            errors.add("Error : Вы не указали дату рождения");
+        }
     }
 
     private void validateName(String name) {

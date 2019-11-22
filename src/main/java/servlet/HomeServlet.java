@@ -2,6 +2,7 @@ package servlet;
 
 import dao.oldDaoWithoutInterfaces.UsersRepository;
 import model.User;
+import service.CommentLoader;
 import service.TimeConverter;
 
 import javax.servlet.ServletException;
@@ -49,5 +50,8 @@ public class HomeServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         this.usersRepository = new UsersRepository();
+
+        this.getServletContext().setAttribute("commentLoader",new CommentLoader());
+
     }
 }
