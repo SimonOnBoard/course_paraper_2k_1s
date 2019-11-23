@@ -7,6 +7,10 @@ import dao.interfaces.PostRepository;
 import dao.PostRepositoryImpl;
 import model.Category;
 import model.Post;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +38,6 @@ public class SearchAbstraction extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String string = req.getParameter("query");
         if(string != null){
-
             String value = req.getParameter("categories");
             List<Post> posts = postRepository.findAllByCategory(value, 0L );
             Map<String,Object> data = new HashMap<>();
@@ -53,8 +58,15 @@ public class SearchAbstraction extends HttpServlet {
     }
     private PostRepository postRepository;
     private ObjectMapper objectMapper;
+    private TransportClient client;
     @Override
     public void init() throws ServletException {
+        try {
+            this.client = new PreBuiltTransportClient(Settings.EMPTY)
+                    .addTransportAddress(new TransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
+        } catch (UnknownHostException e) {
+           throw new IllegalStateException(e);
+        }
         this.postRepository = new PostRepositoryImpl();
         //маппер плохо работает с многопоточностью, поэтому внутри
         this.objectMapper = new ObjectMapper();

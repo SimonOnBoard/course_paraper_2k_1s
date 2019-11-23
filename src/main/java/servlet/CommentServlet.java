@@ -61,4 +61,9 @@ public class CommentServlet extends HttpServlet {
         this.objectMapper = new ObjectMapper();
         this.commentLoader = (CommentLoader) this.getServletContext().getAttribute("commentLoader");
     }
+
+    @Override
+    public void destroy() {
+        System.out.println("Destr");
+    }
 }

@@ -24,6 +24,10 @@ public class ShowPostServlet extends HttpServlet {
         String n1 = req.getParameter("id");
         Long id = Long.parseLong(n1);
         Optional<Post> post = postRepository.find(id);
+
+        if(commentLoader == null){
+            this.commentLoader =  (CommentLoader) this.getServletContext().getAttribute("commentLoader");
+        }
         if(post.isPresent()){
             List<Pair<Comment, UserDto>> comments = commentLoader.getComments(id);
             req.setAttribute("comments",comments);
@@ -45,7 +49,6 @@ public class ShowPostServlet extends HttpServlet {
     private CommentLoader commentLoader;
     @Override
     public void init() throws ServletException {
-        this.commentLoader = new CommentLoader();
         this.postRepository = new PostRepositoryImpl();
         this.commentLoader = (CommentLoader) this.getServletContext().getAttribute("commentLoader");
     }

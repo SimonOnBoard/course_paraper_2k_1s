@@ -6,6 +6,7 @@ import dao.interfaces.RowMapper;
 import model.Category;
 import model.Post;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
@@ -49,7 +50,6 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void save(Post model) {
-        saveToElastic(model);
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO post(name, text, category, photo_path, publication_date, show_auth, author_id) " +
                         "VALUES (?,?,?,?,?,?,?)",
@@ -86,16 +86,13 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-    private synchronized void saveToElastic(Post model) {
+    public void saveToElastic(Post model, Client client, ObjectMapper objectMapper) {
         try {
             String value = objectMapper.writeValueAsString(model);
-            TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
-                    .addTransportAddress(new TransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
             IndexResponse response = client.prepareIndex("test_ind", "_doc", String.valueOf(model.getId()))
                     .setSource(value, XContentType.JSON)
                     .get();
             System.out.println(response);
-            client.close();
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }

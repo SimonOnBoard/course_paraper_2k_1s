@@ -3,7 +3,7 @@
 
 <#macro content>
     <script type="text/javascript">
-        function f(){
+        function f() {
 
             var formData = {
                 'post_id': $('#post_id').val(),
@@ -15,7 +15,7 @@
                 url: "/comment",
                 type: "post",
                 data: formData,
-                success: function(data) {
+                success: function (data) {
                     var JSONObject = JSON.parse(data);
                     var div_r = document.createElement("div");
                     div_r.setAttribute("id", "comment_" + JSONObject.key.post_id);
@@ -25,8 +25,8 @@
                         " src=" + "\"" + JSONObject.value.photoPath + "\"" + " />");
                     $("#comment_" + k).append("<a href=" + "\"/home?id=" + JSONObject.key.ownerId + "\" " + ">" +
                         JSONObject.value.nick + "</a>");
-                    $("#comment_" + k).append("<p>"  +  JSONObject.key.text + "</p>");
-                    $("#comment_" + k).append("<p>" + "On data :" +  JSONObject.key.time + "</p>");
+                    $("#comment_" + k).append("<p>" + JSONObject.key.text + "</p>");
+                    $("#comment_" + k).append("<p>" + "On data :" + JSONObject.key.time + "</p>");
                 },
                 error: function (err) {
                     alert("error msg")
@@ -39,27 +39,31 @@
     <p>${post.getText()}</p>
     <p>${post.getPublication().toString()}</p>
     <div id="comments">
-    <#list comments as comment>
-        <div id="comment_${comment.getKey().getId()}">
-            <#if comment.getValue().getPhotoPath()??>
-                <img src="${comment.getValue().getPhotoPath()}" width="30"/>
-            <#else>
-                No photo((
-            </#if>
+        <#if comments?has_content>
+        <#list comments as comment>
+            <div id="comment_${comment.getKey().getId()}">
+                <#if comment.getValue().getPhotoPath()??>
+                    <img src="${comment.getValue().getPhotoPath()}" width="30"/>
+                <#else>
+                    No photo((
+                </#if>
 
-            <a href="/home?id=${comment.getKey().getOwnerId()}">
-                ${comment.getValue().getNick()}
-            </a>
-            <p>
-                ${comment.getKey().getText()}
-            </p>
-            <p>On data : ${comment.getKey().getDate().toString()}</p>
-        </div>
-    </#list>
+                <a href="/home?id=${comment.getKey().getOwnerId()}">
+                    ${comment.getValue().getNick()}
+                </a>
+                <p>
+                    ${comment.getKey().getText()}
+                </p>
+                <p>On data : ${comment.getKey().getDate().toString()}</p>
+            </div>
+        </#list>
+            <#else>
+            <p>No comments here</p>
+        </#if>
     </div>
     <form action="/comment">
         <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
-        <p><textarea rows="10" cols="45" name="text"  id="text"></textarea></p>
+        <p><textarea rows="10" cols="45" name="text" id="text"></textarea></p>
         <p><input type="button" value="Отправить" onclick="f()"/></p>
     </form>
 </#macro>

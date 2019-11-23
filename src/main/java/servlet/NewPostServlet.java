@@ -1,9 +1,14 @@
 package servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.interfaces.PostRepository;
 import dao.PostRepositoryImpl;
 import model.Category;
 import model.Post;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -12,6 +17,8 @@ import javax.servlet.http.*;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -61,11 +68,20 @@ public class NewPostServlet extends HttpServlet {
         p.write(fullpath);
         post.setPhotoPath("/" + localdir + "/" + filename);
         postRepository.save(post);
+        postRepository.saveToElastic(post, (Client) this.getServletContext().getAttribute("client"),objectMapper);
         return post;
     }
     private PostRepository postRepository;
+    private ObjectMapper objectMapper;
     @Override
     public void init() throws ServletException {
         postRepository = new PostRepositoryImpl();
+        this.objectMapper = new ObjectMapper();
+        try {
+            this.getServletContext().setAttribute("client",new PreBuiltTransportClient(Settings.EMPTY)
+                    .addTransportAddress(new TransportAddress(InetAddress.getByName("127.0.0.1"), 9300)));
+        } catch (UnknownHostException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

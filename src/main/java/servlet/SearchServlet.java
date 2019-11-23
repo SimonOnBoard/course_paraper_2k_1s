@@ -56,13 +56,12 @@ public class SearchServlet extends HttpServlet {
                 .addSort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC)
                 .setScroll(new TimeValue(60000))
                 .setQuery(qb)
-                .setSize(1).get(); //max of 100 hits will be returned for each scroll
+                .setSize(100).get(); //max of 100 hits will be returned for each scroll
 //Scroll until no hits are returned
         do {
             for (SearchHit hit : scrollResp.getHits().getHits()) {
                 System.out.println(hit.toString());
             }
-
             scrollResp = client.prepareSearchScroll(scrollResp.getScrollId()).setScroll(new TimeValue(60000)).execute().actionGet();
         } while(scrollResp.getHits().getHits().length != 0);
 //        IndexResponse response = client.prepareIndex("test_index", "_doc", String.valueOf(post1.getId()))
