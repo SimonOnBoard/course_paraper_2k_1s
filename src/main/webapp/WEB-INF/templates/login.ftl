@@ -9,7 +9,7 @@
     function f(){
 
             var formData = {
-                'username': $('#name').val(),
+                'username': $('#username').val(),
                 'password': $('#password').val()
             };
             console.log(formData);
@@ -44,8 +44,8 @@
         Please Sign Up!
     </div>
     <form method="post">
-        <label for="name">User name
-            <input class="input-field" type="text" id="name" name="name">
+        <label for="username">User name
+            <input class="input-field" type="text" id="username" name="username">
         </label>
         <label for="password">Password
             <input class="input-field" type="password" id="password" name="password">

@@ -5,7 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/home/*", "/logout/*", "/newPost/*", "/showPost/*"}, filterName = "filter2")
+@WebFilter(urlPatterns = {"/home/*", "/logout/*", "/newPost/*", "/showPost/*","/comment/*"}, filterName = "filter2")
 public class HomeFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
     }

@@ -33,8 +33,8 @@ public class HomeServlet extends HttpServlet {
         }
         else{
             HttpSession session = req.getSession();
-            Long name = (Long) session.getAttribute("user");
-            user = usersRepository.findById(name).get();
+            Long id = (Long) session.getAttribute("user");
+            user = usersRepository.findById(id).get();
 
             req.setAttribute("curr_user", user);
             req.setAttribute("timeOnBoard", TimeConverter.getUsersTimeOnSite(user.getRegiStrationDate()));

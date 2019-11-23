@@ -1,13 +1,11 @@
 package service;
 
-import com.sun.org.apache.regexp.internal.RE;
 import dao.CommentDaoImpl;
 import dao.interfaces.CommentDao;
 import dao.oldDaoWithoutInterfaces.UsersRepository;
 import dto.UserDto;
 import javafx.util.Pair;
 import model.Comment;
-import model.User;
 
 import java.util.*;
 
@@ -38,5 +36,18 @@ public class CommentLoader {
          else{
              throw new IllegalArgumentException("Нету комментария");
          }
+    }
+
+    public void save(Long id, String text) {
+        Optional<Comment> comment = commentDao.find(id);
+        if(comment.isPresent()){
+            Comment comment1 = comment.get();
+            comment1.setText(text);
+            commentDao.update(comment1);
+        }
+        else{
+            throw new IllegalStateException("Пытаемся обновить комментарий которого нет");
+        }
+
     }
 }

@@ -24,7 +24,24 @@ public class CommentDaoImpl implements CommentDao {
 
     @Override
     public Optional<Comment> find(Long id) {
-        return Optional.empty();
+        Comment comment = null;
+        //Создаём новый объект Statement
+        //Использование try-with-resources необходимо для арантированного закрытия statement,
+        // вне зависимости от успешности операции.
+        String SQL_FIND_BY_ID = "select * from comment WHERE id = ?;";
+
+        try (PreparedStatement statement = connection.prepareStatement(SQL_FIND_BY_ID)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                comment = commentRowMapper.mapRow(resultSet);
+            }
+        } catch (SQLException e) {
+            //Если операция провалилась, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
+        //Возвращаем полученный в результате операции ArrayList
+        return Optional.of(comment);
     }
 
     @Override
@@ -61,10 +78,31 @@ public class CommentDaoImpl implements CommentDao {
             throw new IllegalStateException(e);
         }
     }
-
+    //language=sql
+    public static final String SQLUpdate = "UPDATE comment SET text = ?, owner_id = ?, post_id = ?, date = ?  WHERE id = ?";
     @Override
     public void update(Comment model) {
+        //Создаём новый объект PreparedStatement,с соотвествующим запросом для обновления информации у конкретного пользователя
+        //Использование try-with-resources необходимо для гарантированного закрытия statement,вне зависимости от успешности операции.
+        try (PreparedStatement statement = connection.prepareStatement(SQLUpdate)) {
+            //На место соответвующих вопросительных знаков уставнавливаем параметры модели, которую мы хотим обновить
+            statement.setString(1, model.getText());
+            statement.setLong(2, model.getOwnerId());
+            statement.setLong(3, model.getPostId());
+            statement.setObject(4, model.getDate());
+            statement.setLong(5, model.getId());
+            //Выполняем запрос и сохраняем колличество изменённых строк
+            int updRows = statement.executeUpdate();
 
+            if (updRows == 0) {
+                //Если ничего не было изменено, значит возникла ошибка
+                //Возбуждаем соответсвующее исключений
+                throw new SQLException();
+            }
+        } catch (SQLException e) {
+            //Если обноление провалилось, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
