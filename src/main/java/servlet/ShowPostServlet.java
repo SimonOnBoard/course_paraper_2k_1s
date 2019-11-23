@@ -22,15 +22,14 @@ import java.util.Optional;
 public class ShowPostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(commentLoader == null){
+            this.commentLoader =  (CommentLoader) this.getServletContext().getAttribute("commentLoader");
+        }
         String n1 = req.getParameter("id");
         HttpSession session = req.getSession();
         Long userId = (Long) session.getAttribute("user");
         Long id = Long.parseLong(n1);
         Optional<Post> post = postRepository.find(id);
-
-        if(commentLoader == null){
-            this.commentLoader =  (CommentLoader) this.getServletContext().getAttribute("commentLoader");
-        }
         if(post.isPresent()){
             List<Pair<Comment, UserDto>> comments = commentLoader.getComments(id);
             req.setAttribute("comments",comments);
@@ -38,15 +37,29 @@ public class ShowPostServlet extends HttpServlet {
             req.setAttribute("post",post.get());
             req.getServletContext().getRequestDispatcher("/WEB-INF/templates/showPost.ftl").forward(req,resp);
         }
+        else{
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(commentLoader == null){
+            this.commentLoader =  (CommentLoader) this.getServletContext().getAttribute("commentLoader");
+        }
+        HttpSession session = req.getSession();
+        Long userId = (Long) session.getAttribute("user");
         Long id = (Long) req.getAttribute("id");
         Optional<Post> post = postRepository.find(id);
         if(post.isPresent()){
+            List<Pair<Comment, UserDto>> comments = commentLoader.getComments(id);
+            req.setAttribute("comments",comments);
+            req.setAttribute("userId",userId);
             req.setAttribute("post",post.get());
             req.getServletContext().getRequestDispatcher("/WEB-INF/templates/showPost.ftl").forward(req,resp);
+        }
+        else{
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
     private PostRepository postRepository;

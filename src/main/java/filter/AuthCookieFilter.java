@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(urlPatterns = {"/home/*","/newPost/*","/showPost/*","/comment/*"}, filterName="filter1")
+@WebFilter(urlPatterns = {"/home/*","/newPost/*","/showPost/*","/comment/*","/posts/*"}, filterName="filter1")
 public class AuthCookieFilter implements Filter {
     private UsersAuthRepository authRepository;
     private UsersRepository usersRepository;

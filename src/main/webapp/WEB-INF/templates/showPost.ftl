@@ -83,7 +83,6 @@
             </div>
         </#list>
             <#else>
-            <p>No comments here</p>
         </#if>
     </div>
     <form action="/comment">

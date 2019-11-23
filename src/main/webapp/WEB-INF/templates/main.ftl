@@ -61,6 +61,6 @@
     </script>
 </#macro>
 <#macro title>
-    <title>Filter</title>
+    <title>Search</title>
 </#macro>
 <@display_page />
