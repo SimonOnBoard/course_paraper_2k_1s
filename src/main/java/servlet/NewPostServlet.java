@@ -68,7 +68,12 @@ public class NewPostServlet extends HttpServlet {
         p.write(fullpath);
         post.setPhotoPath("/" + localdir + "/" + filename);
         postRepository.save(post);
-        postRepository.saveToElastic(post, (Client) this.getServletContext().getAttribute("client"),objectMapper);
+        //Я решил не пытаться дальше с нереляционной базой данных, потому что
+        // все виды нужных для сайта реквестов я попробовал
+        // но оставшихся требований больше по баллам и эта фича не стоит того
+        //думаю отхожу к Якупову на курс по нереляционным и будет веселее
+
+//        postRepository.saveToElastic(post, (Client) this.getServletContext().getAttribute("client"),objectMapper);
         return post;
     }
     private PostRepository postRepository;

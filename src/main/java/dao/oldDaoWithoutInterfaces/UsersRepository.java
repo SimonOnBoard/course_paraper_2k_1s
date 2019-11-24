@@ -2,9 +2,11 @@ package dao.oldDaoWithoutInterfaces;
 
 import dao.interfaces.RowMapper;
 import dto.UserDto;
+import model.Post;
 import model.User;
 import singletone.ConnectionService;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -142,5 +144,58 @@ public class UsersRepository {
             throw new IllegalStateException(e);
         }
         return usersInfo;
+    }
+
+    public List<User> findInNickByQuery(String query) {
+        List<User> result = new ArrayList<>();
+
+        //Создаём новый объект Statement
+        //Использование try-with-resources необходимо для арантированного закрытия statement,
+        // вне зависимости от успешности операции.
+        String SQL_findByCategory = "select * from users WHERE nickname like ? ORDER BY id DESC ";
+
+        try (PreparedStatement statement = connection.prepareStatement(SQL_findByCategory)) {
+            statement.setString(1, "%" + query + "%");
+            //ResultSet - итерируемый объект.
+            //Пока есть что доставать, идём по нему и подаём строки в userRowMapper,
+            // который возвращает нам готовый объект User.
+            //Добавляем полученный объект в ArrayList.
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User user = userFindRowMapper.mapRow(resultSet);
+                result.add(user);
+            }
+        } catch (SQLException e) {
+            //Если операция провалилась, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
+        //Возвращаем полученный в результате операции ArrayList
+        return result;
+    }
+
+    public List<User> findAll() {
+        List<User> result = new ArrayList<>();
+
+        //Создаём новый объект Statement
+        //Использование try-with-resources необходимо для арантированного закрытия statement,
+        // вне зависимости от успешности операции.
+        String SQL_find_All = "select * from users ORDER BY id DESC LIMIT 30 ";
+
+        try (Statement statement = connection.createStatement()) {
+            //ResultSet - итерируемый объект.
+            //Пока есть что доставать, идём по нему и подаём строки в userRowMapper,
+            // который возвращает нам готовый объект User.
+            //Добавляем полученный объект в ArrayList.
+            ResultSet resultSet = statement.executeQuery(SQL_find_All);
+            while (resultSet.next()) {
+                User user = userFindRowMapper.mapRow(resultSet);
+                result.add(user);
+            }
+        } catch (SQLException e) {
+            //Если операция провалилась, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
+        //Возвращаем полученный в результате операции ArrayList
+        return result;
     }
 }

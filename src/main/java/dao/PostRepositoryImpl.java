@@ -1,11 +1,13 @@
 package dao;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.interfaces.PostRepository;
 import dao.interfaces.RowMapper;
 import model.Category;
 import model.Post;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -20,6 +22,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 public class PostRepositoryImpl implements PostRepository {
     private ObjectMapper objectMapper;
@@ -68,7 +73,7 @@ public class PostRepositoryImpl implements PostRepository {
                 //Возбуждаем соответсвующее исключений
                 throw new SQLException();
             }
-            //Достаём созданное Id пользователя
+            //Достаём созданное Id поста
             try (ResultSet set = statement.getGeneratedKeys();) {
                 //Если id  существет,обновляем его у подели.
                 if (set.next()) {
@@ -97,6 +102,149 @@ public class PostRepositoryImpl implements PostRepository {
             throw new IllegalStateException(e);
         }
     }
+
+    @Override
+    public void updateInElastic(Post model, Client client, ObjectMapper objectMapper) {
+//        String value = null;
+//        try {
+//            value = objectMapper.writeValueAsString(model);
+//        } catch (JsonProcessingException e) {
+//            throw new IllegalStateException(e);
+//        }
+//        UpdateRequest updateRequest = new UpdateRequest();
+//        updateRequest.index("index");
+//        updateRequest.type("_doc");
+//        updateRequest.id(String.valueOf(model.getId()));
+//        @// TODO: 24/11/2019 Почему всё так с ошибочками и почему depricated
+//        updateRequest.doc();
+//        try {
+//            client.update(updateRequest).get();
+//        } catch (InterruptedException e) {
+//            throw new IllegalStateException(e);
+//        } catch (ExecutionException e) {
+//            throw new IllegalStateException(e);
+//        }
+    }
+
+    @Override
+    public void deleteInElastic(Post model, Client client, ObjectMapper objectMapper) {
+
+    }
+
+    @Override
+    public List<Post> findAllWithNameByQuery(String query) {
+        List<Post> result = new ArrayList<>();
+
+        //Создаём новый объект Statement
+        //Использование try-with-resources необходимо для арантированного закрытия statement,
+        // вне зависимости от успешности операции.
+        String SQL_findByName = "select * from post WHERE name like ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(SQL_findByName)) {
+            statement.setString(1, "%" + query + "%");
+            //ResultSet - итерируемый объект.
+            //Пока есть что доставать, идём по нему и подаём строки в userRowMapper,
+            // который возвращает нам готовый объект User.
+            //Добавляем полученный объект в ArrayList.
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Post post = postRowMapper.mapRow(resultSet);
+                result.add(post);
+            }
+        } catch (SQLException e) {
+            //Если операция провалилась, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
+        //Возвращаем полученный в результате операции ArrayList
+        return result;
+    }
+
+    @Override
+    public List<Post> findAllWithNameByQueryAndCategory(String query, String category) {
+        List<Post> result = new ArrayList<>();
+
+        //Создаём новый объект Statement
+        //Использование try-with-resources необходимо для арантированного закрытия statement,
+        // вне зависимости от успешности операции.
+        String SQL_findByCategory = "select * from post WHERE name like ? AND category = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(SQL_findByCategory)) {
+            statement.setString(1, "%" + query + "%");
+            statement.setObject(2, category);
+            //ResultSet - итерируемый объект.
+            //Пока есть что доставать, идём по нему и подаём строки в userRowMapper,
+            // который возвращает нам готовый объект User.
+            //Добавляем полученный объект в ArrayList.
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Post post = postRowMapper.mapRow(resultSet);
+                result.add(post);
+            }
+        } catch (SQLException e) {
+            //Если операция провалилась, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
+        //Возвращаем полученный в результате операции ArrayList
+        return result;
+    }
+
+    @Override
+    public List<Post> findAllWithTextByQuery(String query) {
+        List<Post> result = new ArrayList<>();
+
+        //Создаём новый объект Statement
+        //Использование try-with-resources необходимо для арантированного закрытия statement,
+        // вне зависимости от успешности операции.
+        String SQL_findByText = "select * from post WHERE text like ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(SQL_findByText)) {
+            statement.setString(1, "%" + query + "%");
+            //ResultSet - итерируемый объект.
+            //Пока есть что доставать, идём по нему и подаём строки в userRowMapper,
+            // который возвращает нам готовый объект User.
+            //Добавляем полученный объект в ArrayList.
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Post post = postRowMapper.mapRow(resultSet);
+                result.add(post);
+            }
+        } catch (SQLException e) {
+            //Если операция провалилась, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
+        //Возвращаем полученный в результате операции ArrayList
+        return result;
+    }
+
+    @Override
+    public List<Post> findAllWithTextByQueryAndCategory(String query, String category) {
+        List<Post> result = new ArrayList<>();
+
+        //Создаём новый объект Statement
+        //Использование try-with-resources необходимо для арантированного закрытия statement,
+        // вне зависимости от успешности операции.
+        String SQL_findByCategory = "select * from post WHERE text like ? AND category = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(SQL_findByCategory)) {
+            statement.setString(1, "%" + query + "%");
+            statement.setObject(2, category);
+            //ResultSet - итерируемый объект.
+            //Пока есть что доставать, идём по нему и подаём строки в userRowMapper,
+            // который возвращает нам готовый объект User.
+            //Добавляем полученный объект в ArrayList.
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Post post = postRowMapper.mapRow(resultSet);
+                result.add(post);
+            }
+        } catch (SQLException e) {
+            //Если операция провалилась, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
+        //Возвращаем полученный в результате операции ArrayList
+        return result;
+    }
+
     //language=sql
     public static final String SQLUpdate = "UPDATE post SET name = ?, text = ?, category = ?, photo_path = ?, show_auth = ?  WHERE id = ?";
 
@@ -108,7 +256,7 @@ public class PostRepositoryImpl implements PostRepository {
             statement.setString(2, model.getText());
             statement.setString(3, model.getCategory().toString());
             statement.setString(4, model.getPhotoPath());
-            statement.setObject(5,model.getShowAuthor());
+            statement.setObject(5, model.getShowAuthor());
             statement.setLong(6, model.getId());
             //Выполняем запрос и сохраняем колличество изменённых строк
             int updRows = statement.executeUpdate();
@@ -156,7 +304,7 @@ public class PostRepositoryImpl implements PostRepository {
         //Создаём новый объект Statement
         //Использование try-with-resources необходимо для арантированного закрытия statement,
         // вне зависимости от успешности операции.
-        String SQL_findByCategory = "select * from post WHERE category = (?) limit 5 offset (?);";
+        String SQL_findByCategory = "select * from post WHERE category = (?) ORDER BY id DESC limit 5 offset (?);";
 
         try (PreparedStatement statement = connection.prepareStatement(SQL_findByCategory)) {
             statement.setString(1, category);

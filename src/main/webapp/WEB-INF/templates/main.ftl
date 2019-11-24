@@ -3,36 +3,90 @@
 
 <#macro content>
     <p><input id="query" oninput="f()"/></p>
-
-    <form method="post" enctype="post" action="/mainSearch">
-        <select id="categories" name="categories">
+    <select id="entity" name="entity" onchange="getval(this);">
+        <option selected value="post">post</option>
+        <option value="user">user</option>
+    </select>
+    <select id="where" name="where" onchange="getval(this);">
+        <option selected value="name">name</option>
+        <option value="text">text</option>
+    </select>
+    <input name="use_category" id="use_category" type="checkbox" value="0"
+           onclick="f()"/>Использовать фильтрацию по категориям
+    <form method="post" action="/mainSearch">
+        <select id="categories" name="categories" onchange="getval(this);">
             <#list categories as category>
                 <option value="${category}">${category}</option>
             </#list>
         </select>
-        <p><input type="submit" value="Использовать фильтрацию по категориям"></p>
+        <p>Просто измените категорию, если хотите получить 5 последних актуальных новостей по ней</p>
     </form>
 
-    <div id="res"></div>
+    <div id="res">
+        <#list posts as post>
+            <div id="post_${post.getId()}">
+                <img src="${post.getPhotoPath()}" width="100"/>
+                <h1>${post.getName()}</h1>
+                <p>${post.getText()}</p>
+                <p>${post.getCategory().toString()}</p>
+                <p>${post.getPublication().toString()}</p>
+                <a href="/showPost?id=${post.getId()}">
+                    Просмотреть запись
+                </a>
+                <#if post.getShowAuthor()>
+                    <a href="/home?id=${post.getAuth_id()}">
+                        Просмотреть профиль автора
+                    </a>
+                <#else>
+                </#if>
+            </div>
+        </#list>
+    </div>
 
 
     <script type="application/javascript">
+        function getval(sel) {
+            f();
+        }
+
         function f() {
-            if ($("#query").val().length >= 1) {
-                var category = $("#categories").val();
-                var query = $("#query").val();
-                $.ajax({
-                    url: "/mainSearch",
-                    data: {
-                        "query": query,
-                        "categories": category
-                    },
-                    type: "post",
-                    success: function (msg) {
-                        var msg = JSON.parse(msg);
+            var category = $("#categories").val();
+            var query = $("#query").val();
+            var entity = $("#entity").val();
+            var where = $("#where").val();
+            var use_c = $("#use_category").serialize();
+            $.ajax({
+                url: "/mainSearch",
+                data: {
+                    "query": query,
+                    "categories": category,
+                    "entity": entity,
+                    "where": where,
+                    "use_c": use_c
+                },
+                type: "post",
+                success: function (msg) {
+                    var msg = JSON.parse(msg);
+                    if (msg.type == "user") {
+                        if (msg.users.length > 0) {
+                            $("#res").html("");
+                            for (var i = 0; i < msg.users.length; i++) {
+                                var div_r = document.createElement("div");
+                                div_r.setAttribute("id", "user_" + i);
+                                $("#res").append(div_r);
+                                $("#user_" + i).append("<img width=" + "\"200\"" + " src=" + "\"" + msg.users[i].photoPath + "\"" + " />");
+                                $("#user_" + i).append("<div>" + msg.users[i].nick + "</div>");
+                                $("#user_" + i).append("<div>" + msg.users[i].email + "</div>");
+                                $("#user_" + i).append("<div>" + msg.users[i].birth + "</div>");
+                                $("#user_" + i).append("<a href=" + "/home?id=" + msg.users[i].id + "> Нажмите, чтобы просмотреть профиль</a><br>");
+
+                            }
+                        } else {
+                            $("#res").html("No results..");
+                        }
+                    } else {
                         if (msg.posts.length > 0) {
                             $("#res").html("");
-                            var html = "";
                             for (var i = 0; i < msg.posts.length; i++) {
                                 var div_r = document.createElement("div");
                                 div_r.setAttribute("id", "post_" + i);
@@ -40,7 +94,7 @@
                                 $("#post_" + i).append("<img width=" + "\"200\"" + " src=" + "\"" + msg.posts[i].photoPath.toString() + "\"" + " />");
                                 $("#post_" + i).append("<div>" + msg.posts[i].name + "</div>");
                                 $("#post_" + i).append("<div>" + msg.posts[i].text + "</div>");
-                                $("#post_" + i).append("<div>" + msg.posts[i].category+ "</div>");
+                                $("#post_" + i).append("<div>" + msg.posts[i].category + "</div>");
                                 var d = new Date(msg.posts[i].time);
                                 $("#post_" + i).append("<div>" + d.toString() + "</div>");
                                 if (msg.posts[i].showAuthor) {
@@ -53,11 +107,9 @@
                             $("#res").html("No results..");
                         }
                     }
-                });
-            } else {
-                $("#res").html("");
-            }
-        }
+                }
+            });
+        };
     </script>
 </#macro>
 <#macro title>

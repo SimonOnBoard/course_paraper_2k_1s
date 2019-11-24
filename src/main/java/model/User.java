@@ -1,6 +1,9 @@
 package model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import serializers.PostSerializer;
+import serializers.UserSerializer;
 import service.PasswordEncripter;
 
 import java.sql.Date;
@@ -9,6 +12,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Data
+@JsonSerialize(using = UserSerializer.class)
 public class User {
     private Long id;
     private String name;

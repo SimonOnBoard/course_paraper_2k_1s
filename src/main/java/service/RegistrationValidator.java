@@ -12,10 +12,14 @@ public class RegistrationValidator {
 
     public List<String> errors;
     private Pattern pattern;
+    private Pattern passwordPattern;
     private Matcher matcher;
     private UsersRepository userDao;
     private static final String EMAIL_PATTERN =
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+                    "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final String PASSWORD_PATTERN =
+            "^[A-Za-z0-9]+(\\.[_A-Za-z0-9-]+)*@" +
                     "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     public RegistrationValidator() {

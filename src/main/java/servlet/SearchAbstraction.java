@@ -7,10 +7,12 @@ import dao.interfaces.PostRepository;
 import dao.PostRepositoryImpl;
 import model.Category;
 import model.Post;
+import model.User;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import service.SearchService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -30,27 +33,50 @@ public class SearchAbstraction extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Enum> enumValues = Arrays.asList(Category.values());
+        List<Post> posts = postRepository.findAllByCategory("Post", 0L );
         req.setAttribute("categories",enumValues);
+        req.setAttribute("posts", posts);
         req.getRequestDispatcher("/WEB-INF/templates/main.ftl").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String string = req.getParameter("query");
-        if(string != null){
-            String value = req.getParameter("categories");
-            List<Post> posts = postRepository.findAllByCategory(value, 0L );
+        String query = req.getParameter("query");
+        if(!"".equals(query)){
             Map<String,Object> data = new HashMap<>();
-            data.put("posts",posts);
+            List<?> objects = searchService.searchByInput(req);
+            if(objects.size() != 0){
+                if(objects.get(0) instanceof User){
+                    data.put("users", objects);
+                    data.put("type", "user");
+                }
+                else{
+                    data.put("posts",objects);
+                    data.put("type", "post");
+                }
+            }
+            else{
+                data.put("posts",objects);
+                data.put("type", "post");
+            }
             String json = objectMapper.writeValueAsString(data);
             resp.setCharacterEncoding("UTF-8");
             resp.getWriter().write(json);
         }
         else{
             String value = req.getParameter("categories");
-            List<Post> posts = postRepository.findAllByCategory(value, 0L );
             Map<String,Object> data = new HashMap<>();
-            data.put("posts",posts);
+            String entity = req.getParameter("entity");
+            if(entity.equals("post")) {
+                List<Post> posts = postRepository.findAllByCategory(value, 0L);
+                data.put("posts", posts);
+                data.put("type", "post");
+            }
+            else{
+                List<User> users = searchService.findAllUsers();
+                data.put("users", users);
+                data.put("type", "user");
+            }
             String json = objectMapper.writeValueAsString(data);
             resp.setCharacterEncoding("UTF-8");
             resp.getWriter().write(json);
@@ -58,15 +84,10 @@ public class SearchAbstraction extends HttpServlet {
     }
     private PostRepository postRepository;
     private ObjectMapper objectMapper;
-    private TransportClient client;
+    private SearchService searchService;
     @Override
     public void init() throws ServletException {
-        try {
-            this.client = new PreBuiltTransportClient(Settings.EMPTY)
-                    .addTransportAddress(new TransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
-        } catch (UnknownHostException e) {
-           throw new IllegalStateException(e);
-        }
+        this.searchService = new SearchService();
         this.postRepository = new PostRepositoryImpl();
         //маппер плохо работает с многопоточностью, поэтому внутри
         this.objectMapper = new ObjectMapper();

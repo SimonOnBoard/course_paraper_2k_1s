@@ -10,7 +10,6 @@
                 'text': $('#text').val()
             };
             console.log(formData);
-
             $.ajax({
                 url: "/comment",
                 type: "post",
@@ -45,6 +44,7 @@
                     p.appendChild(input);
                     form.appendChild(p);
                     $("#comment_" + k).append(form);
+                    $("#formComment").find("textarea").val('');
                 },
                 error: function (err) {
                     alert("error msg")
@@ -85,7 +85,7 @@
             <#else>
         </#if>
     </div>
-    <form action="/comment">
+    <form action="/comment" id="formComment">
         <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
         <p><textarea rows="10" cols="45" name="text" id="text"></textarea></p>
         <p><input type="button" value="Отправить" onclick="f()"/></p>
