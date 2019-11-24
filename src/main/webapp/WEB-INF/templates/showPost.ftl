@@ -27,20 +27,20 @@
                     $("#comment_" + k).append("<p>" + JSONObject.key.text + "</p>");
                     $("#comment_" + k).append("<p>" + "On data :" + JSONObject.key.time + "</p>");
                     var form = document.createElement('form');
-                    form.setAttribute('action','/changeComment');
-                    form.setAttribute('method','get');
+                    form.setAttribute('action', '/changeComment');
+                    form.setAttribute('method', 'get');
                     var p = document.createElement('p');
                     var input = document.createElement('input');
-                    input.setAttribute('type','hidden');
-                    input.setAttribute('name','comment_id');
-                    input.setAttribute('id','comment_id');
-                    input.setAttribute('value',k);
+                    input.setAttribute('type', 'hidden');
+                    input.setAttribute('name', 'comment_id');
+                    input.setAttribute('id', 'comment_id');
+                    input.setAttribute('value', k);
                     p.appendChild(input);
                     form.appendChild(p);
                     var p = document.createElement('p');
                     var input = document.createElement('input');
-                    input.setAttribute('type','submit');
-                    input.setAttribute('value','Редактировать');
+                    input.setAttribute('type', 'submit');
+                    input.setAttribute('value', 'Редактировать');
                     p.appendChild(input);
                     form.appendChild(p);
                     $("#comment_" + k).append(form);
@@ -56,33 +56,50 @@
     <p>${post.getName()}</p>
     <p>${post.getText()}</p>
     <p>${post.getPublication().toString()}</p>
+    <#if userId == post.getAuth_id()>
+        <form action="/changePost/" method="get">
+                    <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
+                    <p><input type="submit" value="Редактировать"/></p>
+                </form>
+        <form action="/posts" method="post">
+                    <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
+                    <p><input type="submit" value="Удалить"/></p>
+        </form>
+        <#else>
+    </#if>
+    <#if post.getShowAuthor()>
+        <a href="/home?id=${post.getAuth_id()}">
+            Просмотреть профиль автора</a>
+        <#else>
+    </#if>
     <div id="comments">
         <#if comments?has_content>
-        <#list comments as comment>
-            <div id="comment_${comment.getKey().getId()}">
-                <#if comment.getValue().getPhotoPath()??>
-                    <img src="${comment.getValue().getPhotoPath()}" width="30"/>
-                <#else>
-                    No photo((
-                </#if>
-
-                <a href="/home?id=${comment.getKey().getOwnerId()}">
-                    ${comment.getValue().getNick()}
-                </a>
-                <p>
-                    ${comment.getKey().getText()}
-                </p>
-                <p>On data : ${comment.getKey().getDate().toString()}</p>
-                <#if comment.getKey().getOwnerId() == userId>
-                    <form action="/changeComment" method="get">
-                        <p><input type="hidden" name="comment_id" id="comment_id" value="${comment.getKey().getId()}"/></p>
-                        <p><input type="submit" value="Редактировать"/></p>
-                    </form>
+            <#list comments as comment>
+                <div id="comment_${comment.getKey().getId()}">
+                    <#if comment.getValue().getPhotoPath()??>
+                        <img src="${comment.getValue().getPhotoPath()}" width="30"/>
                     <#else>
-                </#if>
-            </div>
-        </#list>
-            <#else>
+                        No photo((
+                    </#if>
+
+                    <a href="/home?id=${comment.getKey().getOwnerId()}">
+                        ${comment.getValue().getNick()}
+                    </a>
+                    <p>
+                        ${comment.getKey().getText()}
+                    </p>
+                    <p>On data : ${comment.getKey().getDate().toString()}</p>
+                    <#if comment.getKey().getOwnerId() == userId>
+                        <form action="/changeComment" method="get">
+                            <p><input type="hidden" name="comment_id" id="comment_id"
+                                      value="${comment.getKey().getId()}"/></p>
+                            <p><input type="submit" value="Редактировать"/></p>
+                        </form>
+                    <#else>
+                    </#if>
+                </div>
+            </#list>
+        <#else>
         </#if>
     </div>
     <form action="/comment" id="formComment">

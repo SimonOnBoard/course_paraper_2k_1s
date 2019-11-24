@@ -10,17 +10,18 @@
         ${error_wrong_user}
     </p>
 <#else>
-    <#if viewBirth?has_content>
-        <p>
-            ${curr_user.getBirth_date()}
-        </p>
-    </#if>
+    <img src="${curr_user.getPhotoPath()}" width="100"/>
     <p>
         ${curr_user.getName()}
     </p>
     <p>
         ${curr_user.getEmail()}
     </p>
+    <#if viewBirth?has_content>
+        <p>
+            ${curr_user.getBirth_date()}
+        </p>
+    </#if>
     <p>
         ${timeOnBoard}
     </p>

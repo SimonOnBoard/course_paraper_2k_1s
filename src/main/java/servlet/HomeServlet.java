@@ -18,11 +18,14 @@ import java.util.Optional;
 public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Long id = (Long) session.getAttribute("user");
         String n1 = req.getParameter("id");
         User user = null;
         if(n1 != null){
             Optional<User> user1 = usersRepository.findById(Long.parseLong(n1));
             if(user1.isPresent()){
+                req.setAttribute("viewerId",id);
                 req.setAttribute("viewBirth","true");
                 req.setAttribute("curr_user", user1.get());
                 req.setAttribute("timeOnBoard", TimeConverter.getUsersTimeOnSite(user1.get()    .getRegiStrationDate()));
@@ -32,10 +35,10 @@ public class HomeServlet extends HttpServlet {
             }
         }
         else{
-            HttpSession session = req.getSession();
-            Long id = (Long) session.getAttribute("user");
             user = usersRepository.findById(id).get();
-
+            //Изначально планировалась фича с показом даты рождения, но в итоге из-за сроков её пришлось убрать
+            req.setAttribute("viewerId",id);
+            req.setAttribute("viewBirth","true");
             req.setAttribute("curr_user", user);
             req.setAttribute("timeOnBoard", TimeConverter.getUsersTimeOnSite(user.getRegiStrationDate()));
         }
