@@ -2,11 +2,9 @@ package dao.oldDaoWithoutInterfaces;
 
 import dao.interfaces.RowMapper;
 import dto.UserDto;
-import model.Post;
 import model.User;
 import singletone.ConnectionService;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -241,5 +239,13 @@ public class UsersRepository {
             //Если обноление провалилось, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
             throw new IllegalStateException(e);
         }
+    }
+
+    public Long getCountOfComments(Long n1) {
+        return null;
+    }
+
+    public Long getCountOfPosts(Long n1) {
+        return null;
     }
 }

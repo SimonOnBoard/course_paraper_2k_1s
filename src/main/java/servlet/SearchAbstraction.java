@@ -36,7 +36,7 @@ public class SearchAbstraction extends HttpServlet {
         List<Post> posts = postRepository.findAllByCategory("Post", 0L );
         req.setAttribute("categories",enumValues);
         req.setAttribute("posts", posts);
-        req.getRequestDispatcher("/WEB-INF/templates/main.ftl").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/templates/main1.ftl").forward(req, resp);
     }
 
     @Override

@@ -38,6 +38,7 @@ public class NewPostServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Post post = preparePostToSave(req,resp, session);
+
         req.setAttribute("id", post.getId());
         req.getServletContext().getRequestDispatcher("/showPost").forward(req,resp);
     }

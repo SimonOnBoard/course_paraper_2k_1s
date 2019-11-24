@@ -72,11 +72,11 @@
                                 var div_r = document.createElement("div");
                                 div_r.setAttribute("id", "user_" + i);
                                 $("#res").append(div_r);
-                                $("#user_" + i).append("<img width=" + "\"200\"" + " src=" + "\"" + msg.users[i].photoPath + "\"" + " />");
-                                $("#user_" + i).append("<div>" + msg.users[i].nick + "</div>");
-                                $("#user_" + i).append("<div>" + msg.users[i].email + "</div>");
-                                $("#user_" + i).append("<div>" + msg.users[i].birth + "</div>");
-                                $("#user_" + i).append("<a href=" + "/home?id=" + msg.users[i].id + "> Нажмите, чтобы просмотреть профиль</a><br>");
+                                $(div_r).append("<img width=" + "\"200\"" + " src=" + "\"" + msg.users[i].photoPath + "\"" + " />");
+                                $(div_r).append("<div>" + msg.users[i].nick + "</div>");
+                                $(div_r).append("<div>" + msg.users[i].email + "</div>");
+                                $(div_r).append("<div>" + msg.users[i].birth + "</div>");
+                                $(div_r).append("<a href=" + "/home?id=" + msg.users[i].id + "> Нажмите, чтобы просмотреть профиль</a><br>");
 
                             }
                         } else {
@@ -89,16 +89,16 @@
                                 var div_r = document.createElement("div");
                                 div_r.setAttribute("id", "post_" + i);
                                 $("#res").append(div_r);
-                                $("#post_" + i).append("<img width=" + "\"200\"" + " src=" + "\"" + msg.posts[i].photoPath.toString() + "\"" + " />");
-                                $("#post_" + i).append("<div>" + msg.posts[i].name + "</div>");
-                                $("#post_" + i).append("<div>" + msg.posts[i].text + "</div>");
-                                $("#post_" + i).append("<div>" + msg.posts[i].category + "</div>");
+                                $(div_r).append("<img width=" + "\"200\"" + " src=" + "\"" + msg.posts[i].photoPath.toString() + "\"" + " />");
+                                $(div_r).append("<div>" + msg.posts[i].name + "</div>");
+                                $(div_r).append("<div>" + msg.posts[i].text + "</div>");
+                                $(div_r).append("<div>" + msg.posts[i].category + "</div>");
                                 var d = new Date(msg.posts[i].time);
-                                $("#post_" + i).append("<div>" + d.toString() + "</div>");
+                                $(div_r).append("<div>" + d.toString() + "</div>");
                                 if (msg.posts[i].showAuthor) {
-                                    $("#post_" + i).append("<a href=" + "/home?id=" + msg.posts[i].auth_id + "> Нажмите, чтобы просмотреть профиль автора </a><br>");
+                                    $(div_r).append("<a href=" + "/home?id=" + msg.posts[i].auth_id + "> Нажмите, чтобы просмотреть профиль автора </a><br>");
                                 }
-                                $("#post_" + i).append("<a href=" + "/showPost?id=" + msg.posts[i].id + "> Нажмите, чтобы просмотреть текст записи </a>");
+                                $(div_r).append("<a href=" + "/showPost?id=" + msg.posts[i].id + "> Нажмите, чтобы просмотреть текст записи </a>");
 
                             }
                         } else {

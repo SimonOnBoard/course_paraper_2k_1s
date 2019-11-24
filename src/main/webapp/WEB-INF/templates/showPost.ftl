@@ -52,61 +52,78 @@
             });
         }
     </script>
-    <img src="${post.getPhotoPath()}" width="200"/>
-    <p>${post.getName()}</p>
-    <p>${post.getText()}</p>
-    <p>${post.getPublication().toString()}</p>
-    <#if userId == post.getAuth_id()>
-        <form action="/changePost/" method="get">
-                    <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
-                    <p><input type="submit" value="Редактировать"/></p>
-                </form>
-        <form action="/posts" method="post">
-                    <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
-                    <p><input type="submit" value="Удалить"/></p>
-        </form>
-        <#else>
-    </#if>
-    <#if post.getShowAuthor()>
-        <a href="/home?id=${post.getAuth_id()}">
-            Просмотреть профиль автора</a>
-        <#else>
-    </#if>
-    <div id="comments">
-        <#if comments?has_content>
-            <#list comments as comment>
-                <div id="comment_${comment.getKey().getId()}">
-                    <#if comment.getValue().getPhotoPath()??>
-                        <img src="${comment.getValue().getPhotoPath()}" width="30"/>
-                    <#else>
-                        No photo((
-                    </#if>
+    <div class="my-container" style="min-height:100%; height:auto;">
+        <div class="post-container">
+            <h2>${post.getName()}</h2>
+            <p><img src="${post.getPhotoPath()}" width="60%">
+                <#if post.getShowAuthor()>
+            <p><strong>Author: </strong><a href="/home?id=${post.getAuth_id()}">
+                    Просмотреть профиль автора</a></p>
+            <#else>
+            </#if>
+            <p>${post.getPublication().toString()}</p>
 
-                    <a href="/home?id=${comment.getKey().getOwnerId()}">
-                        ${comment.getValue().getNick()}
-                    </a>
-                    <p>
-                        ${comment.getKey().getText()}
-                    </p>
-                    <p>On data : ${comment.getKey().getDate().toString()}</p>
-                    <#if comment.getKey().getOwnerId() == userId>
-                        <form action="/changeComment" method="get">
-                            <p><input type="hidden" name="comment_id" id="comment_id"
-                                      value="${comment.getKey().getId()}"/></p>
-                            <p><input type="submit" value="Редактировать"/></p>
-                        </form>
-                    <#else>
-                    </#if>
-                </div>
-            </#list>
-        <#else>
-        </#if>
+            <p>${post.getText()}</p>
+            <#if userId == post.getAuth_id()>
+                <form action="/changePost/" method="get">
+                    <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
+                    <button type="submit" class="btn btn-danger">Edit</button>
+                </form>
+                <form action="/posts" method="post">
+                    <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <#else>
+            </#if>
+
+            <div id="comments" class="comments">
+                <h1 style="padding-top:1rem;">Comments</h1>
+
+
+                <form name="leaveComment" action="/comment" id="formComment">
+                    <input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/>
+                    <textarea class="comment-area" id="text" name="text" rows="3"></textarea>
+                    <button type="button" class="btn btn-danger" onclick="f()">Submit</button>
+                </form>
+
+                <#if comments?has_content>
+                    <#list comments as comment>
+                    <div class="comment" id="comment_${comment.getKey().getId()}">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <img src="${comment.getValue().getPhotoPath()}">
+                            </div>
+                            <div class="col-sm-9" style="margin:auto">
+                                <div><a href="/home?id=${comment.getKey().getOwnerId()}">
+                                        ${comment.getValue().getNick()}
+                                    </a> <br><span
+                                            class="text-small">Опубликовано: ${comment.getKey().getDate().toString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-data">
+                            ${comment.getKey().getText()}
+                            <#if comment.getKey().getOwnerId() == userId>
+                                <form action="/changeComment" method="get">
+                                    <p><input type="hidden" name="comment_id" id="comment_id"
+                                              value="${comment.getKey().getId()}"/></p>
+                                    <button type="submit" class="btn btn-danger">Edit</button>
+                                </form>
+                            <#else>
+                            </#if>
+                        </div>
+                    </div>
+                    </#list>
+                <#else>
+                    <p>No comments</p>
+                </#if>
+
+            </div>
+        </div>
+
     </div>
-    <form action="/comment" id="formComment">
-        <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
-        <p><textarea rows="10" cols="45" name="text" id="text"></textarea></p>
-        <p><input type="button" value="Отправить" onclick="f()"/></p>
-    </form>
+
+
 </#macro>
 <#macro title>
     <title>Post</title>

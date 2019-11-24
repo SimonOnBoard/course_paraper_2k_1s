@@ -24,6 +24,8 @@ public class HomeServlet extends HttpServlet {
         User user = null;
         if(n1 != null){
             Optional<User> user1 = usersRepository.findById(Long.parseLong(n1));
+            Long countOfPosts = usersRepository.getCountOfPosts(Long.parseLong(n1));
+            Long countOfComments = usersRepository.getCountOfComments(Long.parseLong(n1));
             if(user1.isPresent()){
                 req.setAttribute("viewerId",id);
                 req.setAttribute("viewBirth","true");
@@ -38,6 +40,8 @@ public class HomeServlet extends HttpServlet {
         }
         else{
             user = usersRepository.findById(id).get();
+            Long countOfPosts = usersRepository.getCountOfPosts(id);
+            Long countOfComments = usersRepository.getCountOfComments(id);
             //Изначально планировалась фича с показом даты рождения, но в итоге из-за сроков её пришлось убрать
             req.setAttribute("viewerId",id);
             req.setAttribute("viewBirth","true");

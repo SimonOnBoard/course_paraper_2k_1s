@@ -19,7 +19,7 @@
 
                 <div id="namer">
                     <div id="namer-input">
-                        <input type="text" id="user_name" name="user_name" placeholder="Type your login" required>
+                        <input type="text" id="user_name" name="user_name" placeholder="Type your nick" required>
                     </div>
                 </div>
 
@@ -31,26 +31,26 @@
 
                 <div id="namer">
                     <div id="namer-input">
-                        <input type="email" id="email" name="email" placeholder="Type your email" required>
+                        <input type="text" id="email" name="email" placeholder="Type your email"/>
                     </div>
                 </div>
 
                 <div id="namer">
                     <div id="namer-input">
-                        <input type="text" id="name" name="name" placeholder="Type your name" required>
+                        <input type="text" id="name" name="name" placeholder="Type your login" required>
                     </div>
                 </div>
 
                 <div id="namer">
                     <div id="namer-input">
                         <input type="date" id="date" name="birth" value="${cur_date}"
-                               min="1900-01-01" max="2020-01-01" required>
+                               min="1900-01-01" max="2020-01-01">
                     </div>
                 </div>
 
                 <div id="namer">
                     <div id="namer-input">
-                        <input type="file" id="photo" name="photo" required>
+                        <input type="file" id="photo" name="photo">
                     </div>
                 </div>
 
