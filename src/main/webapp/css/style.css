@@ -24,6 +24,11 @@ body a:hover {
 body p{
     margin:0;
 }
+
+body label{
+    color:white;
+}
+
 .big{
     font-size:1.5em;
 }
@@ -299,6 +304,10 @@ just for appearance; change whatever you want
 
 .profile-main-text{
     margin:auto;
+}
+
+.profile-main-text p{
+    margin-bottom:1rem;
 }
 
 /* INPUT */

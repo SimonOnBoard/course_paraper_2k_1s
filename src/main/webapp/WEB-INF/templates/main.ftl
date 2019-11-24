@@ -1,6 +1,5 @@
 <#ftl encoding='UTF-8'>
 <#include "base.ftl"/>
-
 <#macro content>
     <p><input id="query" oninput="f()"/></p>
     <select id="entity" name="entity" onchange="getval(this);">
@@ -42,7 +41,6 @@
             </div>
         </#list>
     </div>
-
 
     <script type="application/javascript">
         function getval(sel) {

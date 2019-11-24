@@ -32,6 +32,8 @@ public class HomeServlet extends HttpServlet {
             }
             else{
                 req.setAttribute("error_wrong_user","No user avaliable for this id");
+                req.getServletContext().getRequestDispatcher("/WEB-INF/templates/wrongUser.ftl").forward(req,resp);
+                return;
             }
         }
         else{
