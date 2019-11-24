@@ -44,5 +44,6 @@ public class User {
         this.regiStrationDate = now;
         this.countPosts = l;
         this.photoPath = photoPath;
+
     }
 }

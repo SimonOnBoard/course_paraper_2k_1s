@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
+
 </head>
 <body>
 <#if error_wrong_user?has_content>
@@ -12,7 +13,7 @@
 <#else>
     <img src="${curr_user.getPhotoPath()}" width="100"/>
     <p>
-        ${curr_user.getName()}
+        ${curr_user.getNick()}
     </p>
     <p>
         ${curr_user.getEmail()}
@@ -25,8 +26,15 @@
     <p>
         ${timeOnBoard}
     </p>
+    <#if owner?has_content>
+        <input type="submit" value="logout"
+               onclick="window.location='/logout';" />
+        <form action="/changeProfile/" method="get">
+            <p><input type="hidden" name="user_id" id="user_id" value="${curr_user.getId()}"/></p>
+            <p><input type="submit" value="Edit"/></p>
+        </form>
+        <#else>
+    </#if>
 </#if>
-<input type="submit" value="logout"
-       onclick="window.location='/logout';" />
 </body>
 </html>

@@ -39,6 +39,7 @@ public class HomeServlet extends HttpServlet {
             //Изначально планировалась фича с показом даты рождения, но в итоге из-за сроков её пришлось убрать
             req.setAttribute("viewerId",id);
             req.setAttribute("viewBirth","true");
+            req.setAttribute("owner","true");
             req.setAttribute("curr_user", user);
             req.setAttribute("timeOnBoard", TimeConverter.getUsersTimeOnSite(user.getRegiStrationDate()));
         }

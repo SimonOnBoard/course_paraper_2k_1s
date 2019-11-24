@@ -198,4 +198,48 @@ public class UsersRepository {
         //Возвращаем полученный в результате операции ArrayList
         return result;
     }
+
+    public Optional<User> findByIdForRegistration(Long id) {
+        User user = null;
+        try (PreparedStatement statement = connection.prepareStatement("SELECT id,nickname,email,photo_path FROM users WHERE id = ?")) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            //Если соответстующая строка найдена,обрабатываем её c помощью userRowMapper.
+            //Соответствунно получаем объект User.
+            if (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getLong("id"));
+                user.setEmail(resultSet.getString("email"));
+                user.setNick(resultSet.getString("nickname"));
+                user.setPhotoPath(resultSet.getString("photo_path"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(user);
+    }
+    //language=sql
+    public static final String SQLUpdate = "UPDATE users SET  nickname = ?, password = ?, email = ?, photo_path = ? WHERE id = ?";
+    public void update(User model) {
+        try (PreparedStatement statement = connection.prepareStatement(SQLUpdate)) {
+            //На место соответвующих вопросительных знаков уставнавливаем параметры модели, которую мы хотим обновить
+            statement.setString(1, model.getNick());
+            statement.setString(2, model.getPassword());
+            statement.setString(3, model.getEmail());
+            statement.setString(4, model.getPhotoPath());
+            statement.setLong(5, model.getId());
+            //Выполняем запрос и сохраняем колличество изменённых строк
+            int updRows = statement.executeUpdate();
+
+            if (updRows == 0) {
+                //Если ничего не было изменено, значит возникла ошибка
+                //Возбуждаем соответсвующее исключений
+                throw new SQLException();
+            }
+        } catch (SQLException e) {
+            //Если обноление провалилось, обернём пойманное исключение в непроверяемое и пробросим дальше(best-practise)
+            throw new IllegalStateException(e);
+        }
+    }
 }

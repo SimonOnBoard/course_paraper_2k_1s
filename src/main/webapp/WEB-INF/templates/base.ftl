@@ -1,3 +1,4 @@
+<#ftl encoding='UTF-8'>
 <#macro content></#macro>
 <#macro title></#macro>
 

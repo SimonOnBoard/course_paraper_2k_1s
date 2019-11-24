@@ -13,7 +13,7 @@ public class LoginValidator {
         password = PasswordEncripter.getEncryptedString(password);
         if(user.isPresent()) {
             User user1 = user.get();
-            if (!user1.getName().equals(name) && user1.getPassword().equals(password)){
+            if (!user1.getName().equals(name) || !user1.getPassword().equals(password)){
                 errors.add("Неверный логин или пароль");
             }
         }
