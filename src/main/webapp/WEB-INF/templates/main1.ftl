@@ -112,6 +112,7 @@
                                 div_r_1.setAttribute("id", "user_" + i);
                                 div_r_1.setAttribute("style", "width:95%; margin-right:5%;");
                                 $("#res").append(div_r);
+                                $("#div_"+i).append(div_r_1);
                                 $("#user_" + i).append("<p><img height=\"100\" src=\"" + msg.users[i].photoPath + "\"> &nbsp; <span class=\"big\">" + msg.users[i].nick + "</span></p>");
                                 $("#user_" + i).append("<p class=\"post-text\">Email: " + msg.users[i].email + "</p>");
                                 $("#user_" + i).append("<p class=\"post-text\">Birth: " + msg.users[i].birth + "</p>");

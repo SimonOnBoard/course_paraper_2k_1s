@@ -72,7 +72,6 @@ body label{
     background-color: #1999c7;
     border: none;
     color: white;
-
 }
 
 .btn-danger:hover,
@@ -83,6 +82,16 @@ body label{
     border: none;
     color: white;
 
+}
+
+.btn-link{
+    color:white;
+}
+
+.btn-link:hover,
+.btn-link:focus,
+.btn-link:visited{
+    color:white;
 }
 
 .menu {
@@ -443,6 +452,7 @@ just for appearance; change whatever you want
     width:100%;
     margin-bottom:1rem;
 }
+
 
 .comment-data{
     padding-top:1rem;

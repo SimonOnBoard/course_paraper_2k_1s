@@ -1,3 +1,4 @@
+<#ftl encoding='UTF-8'>
 <#include "base.ftl"/>
 <#macro content>
 
@@ -7,7 +8,7 @@
             <form method="post" enctype="multipart/form-data">
 
                 <div id="namer">
-                    <div id="namer-input">
+                    <div id="namer-input" style="margin-bottom:2rem;">
                         <input type="text" id="name" name="name" placeholder="Name" required>
                     </div>
 
@@ -21,17 +22,17 @@
                     </div>
 
                     <div id="namer-input">
-                        <textarea class="comment-area" name=text rows="3"></textarea>
+                        <textarea class="comment-area" name=text rows="3" ></textarea>
                     </div>
 
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="showAuth" value="0">
-                        <label class="form-check-label" for="showAuth">Использовать фильтрацию по категориям</label>
+                        <input type="checkbox" class="form-check-input" name="showAuth" value="0" style="height:auto;">
+                        <label class="form-check-label" for="showAuth">Отображать имя автора</label>
                     </div>
 
 
-                    <div id="namer-input">
-                        <input type="file" id="photo" name="photo">
+                    <div id="namer-input" style="border-bottom:none;">
+                        <input type="file" id="photo" name="photo" class="btn btn-danger">
                     </div>
 
                 </div>
