@@ -32,28 +32,26 @@
 
     <body>
     <div class="menu" id="menu">
-        <a href="#">
+        <a href="/main">
             <div class="menu-item" id="menu_item1" title="Main page"><p><i class="fa fa-home" style="font-size:2.8rem;"
                                                                            aria-hidden="true"></i></p></div>
         </a>
-        <a href="#">
+        <a href="/mainSearch">
             <div class="menu-item" id="menu_item2" title="Feed"><p><i class="fa fa-newspaper-o"
                                                                       style="font-size:2.8rem;"
                                                                       aria-hidden="true"></i></p></div>
         </a>
-        <a href="#">
+        <a href="/posts">
             <div class="menu-item" id="menu_item3" title="My posts"><p><i class="fa fa-clone" style="font-size:2.8rem;"
                                                                           aria-hidden="true"></i></p></div>
         </a>
-        <a href="#">
+        <a href="/comment">
             <div class="menu-item" id="menu_item4" title="My comments"><p><i class="fa fa-commenting-o"
                                                                              style="font-size:2.8rem;"
                                                                              aria-hidden="true"></i></p></div>
         </a>
-        <a href="#">
-            <div class="menu-item" id="menu_item5" title="Log out"><p><i class="fa fa-sign-out"
-                                                                         style="font-size:2.8rem;"
-                                                                         aria-hidden="true"></i></p></div>
+        <a href="/home/">
+            <div class="menu-item" id="menu_item5" title="Log out"><p><i class="fa fa-user" style="font-size:2.8rem;" aria-hidden="true"></i></p></div>
         </a>
     </div>
     <@content />

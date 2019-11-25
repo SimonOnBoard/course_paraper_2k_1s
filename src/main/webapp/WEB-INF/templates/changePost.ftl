@@ -1,23 +1,50 @@
 <#ftl encoding='UTF-8'>
 <#include "base.ftl"/>
-
 <#macro content>
-    <form action="/changePost/" method="post" enctype="multipart/form-data">
-        <img src="${post.getPhotoPath()}" width="150"/>
-        <p><input type="file" name="photo" />Вы можете выбрать новою картинку</p>
-        <input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/>
-        <input type="hidden" name="path" id="path" value="${path}"/>
-        <p><input type="text" name="name" value="${post.getName()}"/></p>
-        <select id="categories" name="categories">
-            <#list categories as category>
-                <option value = "${category}">${category}</option>
-            </#list>
-            <option selected value="${categoryA}">${categoryA}</option>
-        </select>
-        <p><textarea rows="10" cols="45" name="text" id="text">${post.getText()}</textarea></p>
-        <input name="showAuth" type="checkbox" value="0"/>Show author information
-        <p><input type="submit" value="Сохранить"/></p>
-    </form>
+
+    <div class="my-container">
+        <div class="reg-container">
+
+            <form action="/changePost/" method="post" enctype="multipart/form-data">
+                <h1>изменить пост</h1>
+
+                <input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/>
+                <input type="hidden" name="path" id="path" value="${path}"/>
+
+                <div id="namer">
+                    <div id="namer-input">
+                        <input type="text" id="name" name="name" value="${post.getName()}" placeHolder="Name" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <select class="form-control" id="categories" name="categories" style="height:1.8em;">
+                            <#list categories as category>
+                                <option value="${category}">${category}</option>
+                            </#list>
+                        </select>
+                    </div>
+
+                    <div id="namer-input">
+                        <textarea class="comment-area" name=text id="text" rows="3" placeholder="Text">${post.getText()}</textarea>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="showAuth" value="0" style="height:auto;">
+                        <label class="form-check-label" for="showAuth">Отображать имя автора</label>
+                    </div>
+
+
+                    <div id="namer-input">
+                        <input type="file" id="photo" name="photo">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-danger btn-lg">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
 </#macro>
 <#macro title>
     <title>CommentChange</title>

@@ -8,7 +8,7 @@ public class ConnectionService {
     public static Connection connection;
     private final String url = "jdbc:postgresql://localhost:5432/auth_test";
     private final String name = "postgres";
-    private final String password = "QAZedctgb123";
+    private final String password = "1111";
 
     private ConnectionService(){
         try {
