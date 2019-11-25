@@ -5,7 +5,7 @@
 
     <div class="feed-container">
         <div class="feed">
-            <h1>Feed</h1>
+            <h1>Feed <a href="/newPost"><i class="fa fa-plus" aria-hidden="true"></i></a></h1>
             <div id="namer" style="margin-bottom:3rem;">
                 <div id="namer-input" style="margin:auto;">
                     <input type="text" id="query" oninput="f()" placeholder="Search" style="margin-bottom:1rem;">
@@ -56,7 +56,7 @@
                             </p>
 
                             <p class="post-text">${post.getText()}</p>
-                            <p>${post.getCategory().toString()}</p>
+                            <p>Категория: ${post.getCategory().toString()}</p>
                             <p>${post.getPublication().toString()}</p>
                             <p style="padding-top:2rem;"><a href="/showPost?id=${post.getId()}">
                                     Просмотреть запись
@@ -143,7 +143,7 @@
                                 if (msg.posts[i].showAuthor) {
                                     $("#post_" + i).append("<p class=\"post-text\"><a href=" + "/home?id=" + msg.posts[i].auth_id + "> Профиль автора </a></p>");
                                 }
-                                $("#post_" + i).append("<p class=\"post-text\"><a href=" + "/home?id=" + msg.posts[i].id + "> Текст записи </a></p>");
+                                $("#post_" + i).append("<p class=\"post-text\"><a href=" + "/showPost?id=" + msg.posts[i].id + "> Текст записи </a></p>");
                             }
                         } else {
                             $("#res").html("No results..");

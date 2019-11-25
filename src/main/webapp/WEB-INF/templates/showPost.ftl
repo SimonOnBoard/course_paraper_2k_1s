@@ -25,15 +25,15 @@
                     form.setAttribute('action', '/changeComment');
                     form.setAttribute('method', 'get');
                     form.setAttribute('style', 'display: inline-block;');
-                    var p = document.createElement('p');
+                    var b = document.createElement('b');
                     var input = document.createElement('input');
                     input.setAttribute('type', 'hidden');
                     input.setAttribute('name', 'comment_id');
                     input.setAttribute('id', 'comment_id');
                     input.setAttribute('value', k);
-                    p.appendChild(input);
-                    form.appendChild(p);
-                    var p = document.createElement('p');
+                    b.appendChild(input);
+                    form.appendChild(b);
+                    var b = document.createElement('b');
                     var button = document.createElement('button');
                     button.setAttribute('type', 'submit');
                     button.setAttribute('class', 'btn btn-link');
@@ -42,8 +42,8 @@
                     icon.setAttribute("class", "fa fa-pencil-square-o");
                     icon.setAttribute("aria-hidden", "true");
                     button.appendChild(icon);
-                    p.appendChild(button);
-                    form.appendChild(p);
+                    b.appendChild(button);
+                    form.appendChild(b);
                     $("#comment_" + k).append(form);
                     $("#formComment").find("textarea").val('');
 
@@ -51,7 +51,7 @@
                     $("#comment_" + k).append("<div class=\"row\"> <div class=\"col-sm-3\"><img src=\""
                         + JSONObject.value.photoPath
                         + "\"></div><div class=\"col-sm-9\" style=\"margin:auto\"><div><a href=\"/home?id=\""
-                        + JSONObject.key.ownerId + "\">" +
+                        +JSONObject.key.ownerId+"\">" +
                         JSONObject.value.nick + "</a>");
                         if(JSONObject.key.ownerId === ${userId}){
                             $("#comment_" + k).append(form);
@@ -72,7 +72,7 @@
     <div class="my-container" style="min-height:100%; height:auto;">
         <div class="post-container">
             <h2>${post.getName()} <#if userId == post.getAuth_id()>
-                    <form action="/changePost/" method="get" style="display: inline-block;">
+                    <form action="/changePost" method="get" style="display: inline-block;">
                         <p><input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/></p>
                         <button type="submit" class="btn btn-link"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     </form>

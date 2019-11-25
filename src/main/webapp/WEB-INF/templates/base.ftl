@@ -50,7 +50,7 @@
                                                                              style="font-size:2.8rem;"
                                                                              aria-hidden="true"></i></p></div>
         </a>
-        <a href="/home/">
+        <a href="/home">
             <div class="menu-item" id="menu_item5" title="Log out"><p><i class="fa fa-user" style="font-size:2.8rem;" aria-hidden="true"></i></p></div>
         </a>
     </div>

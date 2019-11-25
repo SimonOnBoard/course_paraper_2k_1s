@@ -2,23 +2,21 @@
 <#include "base.ftl"/>
 <#macro content>
 
-
     <div class="my-container">
         <div class="reg-container">
+            <h1>Изменение профиля</h1>
 
-            <form action="/changeProfile/" method="post" enctype="multipart/form-data">
-                <h1>Sign in</h1>
-                <small class="form-text text-white" style="margin-bottom: 1.7rem;"><a href="/registration">Sign
-                        up</a></small>
-
-                <#if errors?has_content>
-                    <div id="error_list">
+            <#if errors?has_content>
+                <div id="error_list">
                     <#list errors as error>
                         <p>${error}</p>
                     </#list>
-                    </div>
-                <#else>
-                </#if>
+                </div>
+            <#else>
+            </#if>
+
+            <form action="/changeProfile" method="post" enctype="multipart/form-data">
+
 
 
                 <div id="namer">
@@ -27,11 +25,11 @@
 
 
                     <div id="namer-input">
-                        <input type="text" id="nick" name="nick"  value="${user.getNick()}" placeholder="Ник" required>
+                        <input type="text" id="nick" name="nick"  value="${user.getNick()}" placeholder="ник" required>
                     </div>
 
                     <div id="namer-input">
-                        <input type="text" id="email" name="email" value="${user.getEmail()}" placeholder="Email">
+                        <input type="text" id="email" name="email" value="${user.getEmail()}" placeholder="email">
                     </div>
 
                     <div id="namer-input">
@@ -52,8 +50,7 @@
 
 
 
-                <button type="button" class="btn btn-danger btn-lg" id="test_ajax" onclick="f()" value="Sign Up">Sign
-                    in
+                <button type="submit" class="btn btn-danger btn-lg" >Сохранить
                 </button>
             </form>
         </div>

@@ -39,7 +39,7 @@ public class RegistrationServlet extends HttpServlet {
         if (errors.isEmpty()) {
             Date birth = Date.valueOf(date);
             Part p = req.getPart("photo");
-            String photoPath = "/avatars/0.5040463975619325.jpg";
+            String photoPath = "/img/no-image.jpg";
             if (p.getSize() != 0) {
                 String localdir = "avatars";
                 String pathDir = getServletContext().getRealPath("") + File.separator + localdir;

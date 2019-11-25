@@ -51,12 +51,12 @@ public class UserEditingServlet extends HttpServlet {
             if(checkErrors(resp,session,errors,id)){
                 return;
             }
-            errors.addAll(validator.validate(req.getParameter("mail"),req.getParameter("password"),
+            errors.addAll(validator.validate(req.getParameter("email"),req.getParameter("password"),
                     req.getParameter("nick"),"loremipsum",user1.getBirth_date().toString()));
             if(checkErrors(resp,session,errors,id)){
                 return;
             }
-            user1.setEmail(req.getParameter("mail"));
+            user1.setEmail(req.getParameter("email"));
             user1.setNick(req.getParameter("nick"));
             user1.setPassword(PasswordEncripter.getEncryptedString(req.getParameter("password")));
             Part p = req.getPart("photo");

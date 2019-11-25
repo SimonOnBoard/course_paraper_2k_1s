@@ -7,7 +7,7 @@
     <div class="my-container">
         <div class="reg-container">
 
-            <form name="log" action="/changeComment" method="post">
+            <form action="/changeComment" method="post">
                 <h1>Изменить комментарий</h1>
 
                 <input type="hidden" name="comment_id" id="comment_id" value="${comment.getId()}"/>
@@ -15,10 +15,9 @@
 
                 <div id="namer">
                     <div id="namer-input">
-                        <textarea rows="5" cols="45" name="text" id="text">${comment.getText()}</textarea>
+                        <textarea class="comment-area" rows="5" cols="45" name="text" id="text">${comment.getText()}</textarea>
                     </div>
                 </div>
-
 
                 <button type="submit" class="btn btn-danger btn-lg">Сохранить</button>
             </form>

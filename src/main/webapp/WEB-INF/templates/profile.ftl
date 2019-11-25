@@ -42,7 +42,7 @@
                         <#if owner?has_content>
                             <input class="btn btn-danger" type="submit" value="logout"
                                    onclick="window.location='/logout';"/>
-                            <form action="/changeProfile/" method="get">
+                            <form action="/changeProfile" method="get">
                                 <p><input type="hidden" name="user_id" id="user_id" value="${curr_user.getId()}"/></p>
                                 <button type="submit" class="btn btn-danger">Edit</button>
                             </form>

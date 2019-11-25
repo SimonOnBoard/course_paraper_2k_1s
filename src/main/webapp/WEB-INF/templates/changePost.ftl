@@ -6,7 +6,7 @@
         <div class="reg-container">
 
             <form action="/changePost/" method="post" enctype="multipart/form-data">
-                <h1>изменить пост</h1>
+                <h1 style="margin-bottom:2rem;">Изменить пост</h1>
 
                 <input type="hidden" name="post_id" id="post_id" value="${post.getId()}"/>
                 <input type="hidden" name="path" id="path" value="${path}"/>
