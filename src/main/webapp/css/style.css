@@ -232,31 +232,31 @@ just for appearance; change whatever you want
 }
 
 .slide:nth-of-type(1) {
-    background-image: url(/img/sl1.jpg), url(/img/dark_tint.png);
+    background-image: url(../img/sl1.jpg), url(../img/dark_tint.png);
     background-size: cover;
     background-blend-mode: overlay;
 }
 
 .slide:nth-of-type(2) {
-    background-image: url(/img/sl2.jpg), url(/img/dark_tint.png);
+    background-image: url(../img/sl2.jpg), url(../img/dark_tint.png);
     background-size: cover;
     background-blend-mode: overlay;
 }
 
 .slide:nth-of-type(3) {
-    background-image: url(/img/sl3.jpg), url(/img/dark_tint.png);
+    background-image: url(../img/sl3.jpg), url(../img/dark_tint.png);
     background-size: cover;
     background-blend-mode: overlay;
 }
 
 .slide:nth-of-type(4) {
-    background-image: url(/img/sl4.jpg), url(/img/dark_tint.png);
+    background-image: url(../img/sl4.jpg), url(../img/dark_tint.png);
     background-size: cover;
     background-blend-mode: overlay;
 }
 
 .slide:nth-of-type(5) {
-    background-image: url(/img/sl5.jpg), url(/img/dark_tint.png);
+    background-image: url(../img/sl5.jpg), url(../img/dark_tint.png);
     background-size: cover;
     background-blend-mode: overlay;
 }

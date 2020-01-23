@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.CompletionException;
 
 @WebServlet("/changeComment")
 public class CommentChanger extends HttpServlet {
@@ -45,6 +46,9 @@ public class CommentChanger extends HttpServlet {
     @Override
     public void init() throws ServletException {
         this.commentLoader = (CommentLoader) this.getServletContext().getAttribute("commentLoader");
+        if(commentLoader == null){
+            commentLoader = new CommentLoader();
+        }
         this.commentDao = new CommentDaoImpl();
     }
 }
